@@ -201,6 +201,35 @@ public class ProfessorPanel {
 
         mainPanel.add(studentsPanel);
     }
+    private void setClassRoomsPanel() {
+        classRoomsPanel = new JPanel();
+        classRoomsPanel.setBounds(0, 0, 750, 575);
+        classRoomsPanel.setLayout(null);
+
+        Object[][] data = getClassrooms();
+        String[] columnNames = {"Name", "Units", "Capacity", "Time", "Day", "Delete"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable table = new JTable(model);
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBounds(20, 20, 700, 450);
+
+        JButton btnAddClassroom = new JButton("Add Classroom");
+        btnAddClassroom.setBounds(580, 480, 140, 30);
+        btnAddClassroom.addActionListener(e -> addClassRoom());
+
+        classRoomsPanel.add(btnAddClassroom);
+        classRoomsPanel.add(sp);
+        classRoomsPanel.setVisible(false);
+
+        mainPanel.add(classRoomsPanel);
+    }
 
     private void addClassRoom() {
 
