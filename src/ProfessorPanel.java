@@ -59,8 +59,52 @@ public class ProfessorPanel {
     }
 
     private void setMenu() {
+        menu = new JPanel();
+        menu.setBounds(0, 125, 250, 575);
+        menu.setLayout(null);
 
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        menu.setBorder(border);
+
+        JButton showPersonalInfo = new JButton("Change Personal Info");
+        showPersonalInfo.setBounds(20, 20, 210, 40);
+        showPersonalInfo.addActionListener(e -> {
+            personalPanel.setVisible(true);
+            studentsPanel.setVisible(false);
+            classRoomsPanel.setVisible(false);
+        });
+
+        JButton seeStudents = new JButton("Students List");
+        seeStudents.setBounds(20, 80, 210, 40);
+        seeStudents.addActionListener(e -> {
+            personalPanel.setVisible(false);
+            studentsPanel.setVisible(true);
+            classRoomsPanel.setVisible(false);
+        });
+
+        JButton seeClassRooms = new JButton("Classrooms List");
+        seeClassRooms.setBounds(20, 140, 210, 40);
+        seeClassRooms.addActionListener(e -> {
+            personalPanel.setVisible(false);
+            studentsPanel.setVisible(false);
+            classRoomsPanel.setVisible(true);
+        });
+
+        JButton logout = new JButton("Logout");
+        logout.setBounds(20, 200, 210, 40);
+        logout.addActionListener(e -> {
+            frame.dispose();
+            new LoginPage();
+        });
+
+        menu.add(showPersonalInfo);
+        menu.add(seeStudents);
+        menu.add(seeClassRooms);
+        menu.add(logout);
+
+        frame.add(menu);
     }
+
 
     private void setMainPanel() {
 
