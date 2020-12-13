@@ -307,7 +307,32 @@ public class ProfessorPanel {
 
 
     private void setStudentsGrade(Student st, Classroom classroom) {
+        JFrame setGradeFrame = new JFrame(String.format("%s %s", st.getFirstName(), st.getLastName()));
+        setGradeFrame.setLayout(null);
+        setGradeFrame.setBounds(300, 300, 370, 200);
 
+        JLabel lblGrade = new JLabel("Grade:");
+        lblGrade.setBounds(30, 50, 100, 30);
+
+        JTextField txtGrade = new JTextField();
+        txtGrade.setBounds(130, 50, 200, 30);
+
+        JButton btnSubmit = new JButton("Submit");
+        btnSubmit.setBounds(135, 130, 100, 30);
+        btnSubmit.addActionListener(e -> {
+            List<Unit> units = st.getUnits();
+            for (Unit unit : units) {
+                if (unit.getClassroom().equals(classroom))
+                    unit.setGrade(Integer.parseInt(txtGrade.getText()));
+            }
+        });
+
+        setGradeFrame.add(lblGrade);
+        setGradeFrame.add(txtGrade);
+        setGradeFrame.add(btnSubmit);
+
+        setGradeFrame.setVisible(true);
+        setGradeFrame.setResizable(false);
     }
 
 }
