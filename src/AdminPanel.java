@@ -336,16 +336,61 @@ public class AdminPanel {
     }
 
 
-    private String[][] getStudents() {
-
-    }
-
-    private String[][] getProfessors() {
-
-    }
-
     private void addStudent() {
+        JFrame addingStudentFrame = new JFrame("Adding student");
+        addingStudentFrame.setLayout(null);
+        addingStudentFrame.setBounds(300, 300, 370, 370);
 
+        JLabel lblFirstName = new JLabel("FirstName:");
+        lblFirstName.setBounds(30, 50, 100, 30);
+
+        JTextField txtFirstName = new JTextField();
+        txtFirstName.setBounds(130, 50, 200, 30);
+
+        JLabel lblLastName = new JLabel("LastName:");
+        lblLastName.setBounds(30, 110, 100, 30);
+
+        JTextField txtLastName = new JTextField();
+        txtLastName.setBounds(130, 110, 200, 30);
+
+        JLabel lblId = new JLabel("StudentID:");
+        lblId.setBounds(30, 170, 100, 30);
+
+        JTextField txtId = new JTextField();
+        txtId.setBounds(130, 170, 200, 30);
+
+        JLabel lblPasswords = new JLabel("Password:");
+        lblPasswords.setBounds(30, 230, 100, 30);
+
+        JTextField txtPassword = new JTextField();
+        txtPassword.setBounds(130, 230, 200, 30);
+
+        JButton btnAdd = new JButton("Create");
+        btnAdd.setBounds(230, 280, 100, 30);
+        btnAdd.addActionListener(e -> {
+            Student st = new Student();
+            st.setFirstName(txtFirstName.getText());
+            st.setLastName(txtLastName.getText());
+            st.setId(txtId.getText());
+            st.setPassword(txtPassword.getText());
+            admin.addStudent(st);
+            addingStudentFrame.dispose();
+            frame.dispose();
+            new AdminPanel(admin);
+        });
+
+
+        addingStudentFrame.add(lblFirstName);
+        addingStudentFrame.add(lblLastName);
+        addingStudentFrame.add(lblId);
+        addingStudentFrame.add(lblPasswords);
+        addingStudentFrame.add(txtFirstName);
+        addingStudentFrame.add(txtLastName);
+        addingStudentFrame.add(txtId);
+        addingStudentFrame.add(txtPassword);
+        addingStudentFrame.add(btnAdd);
+
+        addingStudentFrame.setVisible(true);
     }
 
     private void addProfessor() {
