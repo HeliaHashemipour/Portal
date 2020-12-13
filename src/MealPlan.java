@@ -1,4 +1,5 @@
 public class MealPlan {
+
     private static Meal[] meals;
 
     public static void setMeals(Meal[] meals) {
