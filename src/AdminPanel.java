@@ -311,8 +311,30 @@ public class AdminPanel {
     }
 
     private void setClassRoomsPanel() {
+        classRoomsPanel = new JPanel();
+        classRoomsPanel.setBounds(0, 0, 750, 575);
+        classRoomsPanel.setLayout(null);
 
+        String[][] data = getClassrooms();
+        String[] columnNames = {"Name", "Units", "Capacity", "Time", "Day", "Professor"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable table = new JTable(model);
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBounds(20, 20, 700, 490);
+
+        classRoomsPanel.add(sp);
+        classRoomsPanel.setVisible(false);
+
+        mainPanel.add(classRoomsPanel);
     }
+
 
     private String[][] getStudents() {
 
