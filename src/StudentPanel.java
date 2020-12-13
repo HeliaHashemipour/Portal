@@ -69,8 +69,52 @@ public class StudentPanel {
     }
 
     private void setMenu() {
+        menu = new JPanel();
+        menu.setBounds(0, 125, 250, 575);
+        menu.setLayout(null);
 
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        menu.setBorder(border);
+
+        JButton showPersonalInfo = new JButton("Change Personal Info");
+        showPersonalInfo.setBounds(20, 20, 210, 40);
+        showPersonalInfo.addActionListener(e -> {
+            personalPanel.setVisible(true);
+            mealPanel.setVisible(false);
+            classRoomsPanel.setVisible(false);
+        });
+
+        JButton setMealPlan = new JButton("Change Meal Plan");
+        setMealPlan.setBounds(20, 80, 210, 40);
+        setMealPlan.addActionListener(e -> {
+            personalPanel.setVisible(false);
+            mealPanel.setVisible(true);
+            classRoomsPanel.setVisible(false);
+        });
+
+        JButton seeClassRooms = new JButton("Classrooms List");
+        seeClassRooms.setBounds(20, 140, 210, 40);
+        seeClassRooms.addActionListener(e -> {
+            personalPanel.setVisible(false);
+            mealPanel.setVisible(false);
+            classRoomsPanel.setVisible(true);
+        });
+
+        JButton logout = new JButton("Logout");
+        logout.setBounds(20, 200, 210, 40);
+        logout.addActionListener(e -> {
+            frame.dispose();
+            new LoginPage();
+        });
+
+        menu.add(showPersonalInfo);
+        menu.add(setMealPlan);
+        menu.add(seeClassRooms);
+        menu.add(logout);
+
+        frame.add(menu);
     }
+
 
     private void setPersonalPanel() {
 
