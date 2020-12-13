@@ -154,15 +154,33 @@ public class StudentPanel {
     }
 
     private void setClassRoomsPanel() {
+        classRoomsPanel = new JPanel();
+        classRoomsPanel.setLayout(null);
+        classRoomsPanel.setBounds(0, 0, 750, 575);
 
+        Object[][] data = getClassRooms();
+
+        String[] columnNames = {"Title", "Number Of Units", "Professor", "Class Time", "Class Day", "Delete"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable table = new JTable(model);
+
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBounds(20, 20, 700, 460);
+
+        classRoomsPanel.setVisible(false);
+        classRoomsPanel.add(sp);
+
+        mainPanel.add(classRoomsPanel);
     }
 
-    private Object[][] getMeals() {
 
-    }
-
-    private Object[][] getClassRooms() {
-    }
 }
 
 
