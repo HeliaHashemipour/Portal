@@ -191,6 +191,61 @@ public class AdminPanel {
     }
 
     private void setMealPanel() {
+        mealPanel = new JPanel();
+        mealPanel.setBounds(0, 0, 750, 575);
+        mealPanel.setLayout(null);
+
+        JLabel[] lblMealNames = new JLabel[7];
+        JLabel[] lblMealCosts = new JLabel[7];
+        JTextField[] txtMealNames = new JTextField[7];
+        JTextField[] txtMealCosts = new JTextField[7];
+
+        for (int i = 0; i < 7; i++) {
+            lblMealNames[i] = new JLabel("Name");
+            lblMealNames[i].setBounds(30, 50 + 60 * i, 100, 40);
+
+            txtMealNames[i] = new JTextField();
+            txtMealNames[i].setBounds(80, 56 + 60 * i, 200, 30);
+
+            lblMealCosts[i] = new JLabel("Cost");
+            lblMealCosts[i].setBounds(320, 50 + 60 * i, 100, 40);
+
+            txtMealCosts[i] = new JTextField();
+            txtMealCosts[i].setBounds(370, 56 + 60 * i, 200, 30);
+
+            mealPanel.add(lblMealNames[i]);
+            mealPanel.add(txtMealNames[i]);
+            mealPanel.add(lblMealCosts[i]);
+            mealPanel.add(txtMealCosts[i]);
+        }
+
+        JButton btnCancel = new JButton("Cancel");
+        btnCancel.setBounds(620, 480, 90, 30);
+        btnCancel.addActionListener(e -> {
+            Meal[] meals = MealPlan.getMeals();
+            for (int i = 0; i < meals.length; i++) {
+                txtMealNames[i].setText(meals[i].getName());
+                txtMealCosts[i].setText(String.valueOf(meals[i].getCost()));
+            }
+        });
+
+        JButton btnApply = new JButton("Apply");
+        btnApply.setBounds(510, 480, 90, 30);
+        btnApply.addActionListener(e -> {
+            Meal[] meals = new Meal[7];
+            for (int i = 0; i < 7; i++) {
+                meals[i].setName(txtMealNames[i].getText());
+                meals[i].setCost(Integer.parseInt(txtMealCosts[i].getText()));
+            }
+            MealPlan.setMeals(meals);
+        });
+
+        mealPanel.add(btnCancel);
+        mealPanel.add(btnApply);
+
+        mealPanel.setVisible(false);
+
+        mainPanel.add(mealPanel);
 
     }
 
