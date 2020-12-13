@@ -18,7 +18,25 @@ public class ProfessorPanel {
     private JPanel studentsPanel;
 
     public ProfessorPanel(Professor professor) {
+        this.professor = professor;
 
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setTitle("Professors Panel");
+        frame.setLayout(null);
+
+        setHeader();
+
+        setMainPanel();
+
+        setMenu();
+
+        setStudentsPanel();
+
+        setClassRoomsPanel();
+
+        frame.setResizable(false);
+        frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 

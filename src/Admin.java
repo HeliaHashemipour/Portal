@@ -18,7 +18,7 @@ public class Admin extends Person {
     }
 
     public boolean addStudent(Student student) {
-        
+
     }
 
 }
