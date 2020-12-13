@@ -394,13 +394,62 @@ public class AdminPanel {
     }
 
     private void addProfessor() {
+        JFrame addingProfessorFrame = new JFrame("Adding student");
+        addingProfessorFrame.setLayout(null);
+        addingProfessorFrame.setBounds(300, 300, 370, 370);
 
+        JLabel lblFirstName = new JLabel("FirstName:");
+        lblFirstName.setBounds(30, 50, 100, 30);
+
+        JTextField txtFirstName = new JTextField();
+        txtFirstName.setBounds(130, 50, 200, 30);
+
+        JLabel lblLastName = new JLabel("LastName:");
+        lblLastName.setBounds(30, 110, 100, 30);
+
+        JTextField txtLastName = new JTextField();
+        txtLastName.setBounds(130, 110, 200, 30);
+
+        JLabel lblId = new JLabel("StudentID:");
+        lblId.setBounds(30, 170, 100, 30);
+
+        JTextField txtId = new JTextField();
+        txtId.setBounds(130, 170, 200, 30);
+
+        JLabel lblPasswords = new JLabel("Password:");
+        lblPasswords.setBounds(30, 230, 100, 30);
+
+        JTextField txtPassword = new JTextField();
+        txtPassword.setBounds(130, 230, 200, 30);
+
+        JButton btnAdd = new JButton("Create");
+        btnAdd.setBounds(230, 280, 100, 30);
+        btnAdd.addActionListener(e -> {
+            Professor professor = new Professor();
+            professor.setFirstName(txtFirstName.getText());
+            professor.setLastName(txtLastName.getText());
+            professor.setId(txtId.getText());
+            professor.setPassword(txtPassword.getText());
+            admin.addProfessor(professor);
+            addingProfessorFrame.dispose();
+            frame.dispose();
+            new AdminPanel(admin);
+        });
+
+        addingProfessorFrame.add(lblFirstName);
+        addingProfessorFrame.add(lblLastName);
+        addingProfessorFrame.add(lblId);
+        addingProfessorFrame.add(lblPasswords);
+        addingProfessorFrame.add(txtFirstName);
+        addingProfessorFrame.add(txtLastName);
+        addingProfessorFrame.add(txtId);
+        addingProfessorFrame.add(txtPassword);
+        addingProfessorFrame.add(btnAdd);
+
+        addingProfessorFrame.setVisible(true);
 
     }
 
-    private String[][] getClassrooms() {
-
-    }
 
 
 }
