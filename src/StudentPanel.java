@@ -40,7 +40,21 @@ public class StudentPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
     private void setHeader() {
+        header = new JPanel();
+        header.setBounds(0, 0, 1000, 125);
+        header.setLayout(null);
 
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        header.setBorder(border);
+
+        Label greeting = new Label(String.format("Welcome %s %s.", student.getFirstName(), student.getLastName()));
+        Font font = new Font("Tahoma", Font.PLAIN, 20);
+        greeting.setFont(font);
+        greeting.setBounds(20, 50, 700, 20);
+
+        header.add(greeting);
+
+        frame.add(header);
     }
 
     private void setMainPanel() {
