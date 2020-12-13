@@ -1,0 +1,2 @@
+public class ClassDay {
+}
