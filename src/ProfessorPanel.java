@@ -107,7 +107,14 @@ public class ProfessorPanel {
 
 
     private void setMainPanel() {
+        mainPanel = new JPanel();
+        mainPanel.setBounds(250, 125, 750, 575);
+        mainPanel.setLayout(null);
 
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        mainPanel.setBorder(border);
+
+        frame.add(mainPanel);
     }
 
     private void setStudentsPanel() {
