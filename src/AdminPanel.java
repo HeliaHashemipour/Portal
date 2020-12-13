@@ -250,7 +250,34 @@ public class AdminPanel {
     }
 
     private void setStudentsPanel() {
+        studentsPanel = new JPanel();
+        studentsPanel.setLayout(null);
+        studentsPanel.setBounds(0, 0, 750, 575);
 
+        String[][] data = getStudents();
+        String[] columnNames = {"FirstName", "LastName", "StudentID", "Password", "AverageGrade"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable studentsTable = new JTable(model);
+
+        JScrollPane sp = new JScrollPane(studentsTable);
+        sp.setBounds(20, 20, 700, 460);
+
+        JButton btnAdd = new JButton("Add");
+        btnAdd.addActionListener(e -> addStudent());
+        btnAdd.setBounds(640, 495, 80, 30);
+
+        studentsPanel.add(sp);
+        studentsPanel.add(btnAdd);
+        studentsPanel.setVisible(false);
+
+        mainPanel.add(studentsPanel);
     }
 
     private void setProfessorsPanel() {
