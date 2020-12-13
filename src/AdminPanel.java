@@ -281,7 +281,33 @@ public class AdminPanel {
     }
 
     private void setProfessorsPanel() {
+        professorsPanel = new JPanel();
+        professorsPanel.setBounds(0, 0, 750, 575);
+        professorsPanel.setLayout(null);
 
+        String[][] data = getProfessors();
+        String[] columnNames = {"FirstName", "LastName", "ID", "Password"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable table = new JTable(model);
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBounds(20, 20, 700, 460);
+
+        JButton btnAdd = new JButton("Add");
+        btnAdd.addActionListener(e -> addProfessor());
+        btnAdd.setBounds(640, 495, 80, 30);
+
+        professorsPanel.add(sp);
+        professorsPanel.add(btnAdd);
+        professorsPanel.setVisible(false);
+
+        mainPanel.add(professorsPanel);
     }
 
     private void setClassRoomsPanel() {
