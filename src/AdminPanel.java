@@ -18,6 +18,31 @@ public class AdminPanel {
     private final Admin admin;
 
     public AdminPanel(Admin admin) {
+        this.admin = admin;
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setTitle("Admin Panel");
+        frame.setLayout(null);
+
+        setHeader();
+
+        setMainPanel();
+
+        setMenu();
+
+        setPersonalPanel();
+
+        setProfessorsPanel();
+
+        setStudentsPanel();
+
+        setMealPanel();
+
+        setClassRoomsPanel();
+
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
     }
 
