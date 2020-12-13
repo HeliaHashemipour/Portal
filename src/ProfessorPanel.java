@@ -157,8 +157,49 @@ public class ProfessorPanel {
     }
 
 
-    private void setClassRoomsPanel() {
+    private void setStudentsPanel() {
+        studentsPanel = new JPanel();
+        studentsPanel.setLayout(null);
+        studentsPanel.setBounds(0, 0, 750, 575);
 
+        Object[][] data = getStudents(professor.getClassrooms().size() == 0 ? null : professor.getClassrooms().get(0));
+        String[] columnNames = {"FirstName", "LastName", "StudentID", "SetGrade"};
+
+        JLabel lblClassroom = new JLabel("Classroom");
+        lblClassroom.setBounds(20, 10, 100, 30);
+
+        JComboBox<Classroom> cmbClassrooms = new JComboBox<>();
+        for (Classroom classroom : professor.getClassrooms()) {
+            cmbClassrooms.addItem(classroom);
+        }
+        cmbClassrooms.setBounds(100, 10, 150, 30);
+
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable studentsTable = new JTable(model);
+
+        cmbClassrooms.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                studentsTable.setModel(new DefaultTableModel(getStudents((Classroom) e.getItem()), columnNames));
+                studentsTable.repaint();
+            }
+        });
+
+        JScrollPane sp = new JScrollPane(studentsTable);
+        sp.setBounds(20, 60, 700, 460);
+
+        studentsPanel.add(lblClassroom);
+        studentsPanel.add(cmbClassrooms);
+        studentsPanel.add(sp);
+        studentsPanel.setVisible(false);
+
+        mainPanel.add(studentsPanel);
     }
 
     private void addClassRoom() {
