@@ -232,16 +232,79 @@ public class ProfessorPanel {
     }
 
     private void addClassRoom() {
+        JFrame addingProfessorFrame = new JFrame("Adding student");
+        addingProfessorFrame.setLayout(null);
+        addingProfessorFrame.setBounds(300, 300, 370, 500);
 
+        JLabel lblName = new JLabel("Name:");
+        lblName.setBounds(30, 50, 100, 30);
+
+        JTextField txtName = new JTextField();
+        txtName.setBounds(130, 50, 200, 30);
+
+        JLabel lblNumberOfUnits = new JLabel("NumberOfUnits:");
+        lblNumberOfUnits.setBounds(30, 110, 100, 30);
+
+        JTextField txtNumberOfUnits = new JTextField();
+        txtNumberOfUnits.setBounds(130, 110, 200, 30);
+
+        JLabel lblCapacity = new JLabel("Capacity:");
+        lblCapacity.setBounds(30, 170, 100, 30);
+
+        JTextField txtCapacity = new JTextField();
+        txtCapacity.setBounds(130, 170, 200, 30);
+
+        JLabel lblTime = new JLabel("Time:");
+        lblTime.setBounds(30, 230, 100, 30);
+
+        JComboBox<ClassTime> cmbTime = new JComboBox<>();
+        cmbTime.setBounds(130, 230, 200, 30);
+        cmbTime.addItem(ClassTime.FIRST);
+        cmbTime.addItem(ClassTime.SECOND);
+        cmbTime.addItem(ClassTime.THIRD);
+        cmbTime.addItem(ClassTime.FORTH);
+
+        JLabel lblDay = new JLabel("Day:");
+        lblDay.setBounds(30, 290, 100, 30);
+
+        JComboBox<ClassDay> cmbDay = new JComboBox<>();
+        cmbDay.setBounds(130, 290, 200, 30);
+        cmbDay.addItem(ClassDay.SATURDAY);
+        cmbDay.addItem(ClassDay.SUNDAY);
+        cmbDay.addItem(ClassDay.MONDAY);
+        cmbDay.addItem(ClassDay.TUESDAY);
+        cmbDay.addItem(ClassDay.WEDNESDAY);
+
+        JButton btnAdd = new JButton("Create");
+        btnAdd.setBounds(230, 340, 100, 30);
+        btnAdd.addActionListener(e -> {
+            Classroom classroom = new Classroom();
+            classroom.setName(txtName.getText());
+            classroom.setNumberOfUnit(Integer.parseInt(txtNumberOfUnits.getText()));
+            classroom.setCapacity(Integer.parseInt(txtCapacity.getText()));
+
+            classroom.setProfessor(professor);
+            professor.createClassroom(classroom);
+        });
+
+
+        addingProfessorFrame.add(lblName);
+        addingProfessorFrame.add(lblNumberOfUnits);
+        addingProfessorFrame.add(lblCapacity);
+        addingProfessorFrame.add(lblDay);
+        addingProfessorFrame.add(lblTime);
+        addingProfessorFrame.add(txtName);
+        addingProfessorFrame.add(txtNumberOfUnits);
+        addingProfessorFrame.add(txtCapacity);
+        addingProfessorFrame.add(cmbDay);
+        addingProfessorFrame.add(cmbTime);
+        addingProfessorFrame.add(btnAdd);
+
+        addingProfessorFrame.setVisible(true);
     }
 
-    private Object[][] getClassrooms() {
 
-    }
 
-    private Object[][] getStudents(Classroom classroom) {
-
-    }
 
     private void setStudentsGrade(Student st, Classroom classroom) {
 

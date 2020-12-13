@@ -55,5 +55,29 @@ public class Classroom  {
 
     public Unit getUnit() { return unit; }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 
+    public ClassDay getClassDay() {
+        return classDay;
+    }
+
+    public void setClassDay(ClassDay classDay) {
+        this.classDay = classDay;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Classroom)) return false;
+        Classroom classroom = (Classroom) o;
+        return Objects.equals(getName(), classroom.getName()) && getClassTime() == classroom.getClassTime() && getClassDay() == classroom.getClassDay() && Objects.equals(getProfessor(), classroom.getProfessor());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getClassTime(), getClassDay(), getProfessor());
+    }
 }
