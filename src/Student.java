@@ -13,7 +13,7 @@ public class Student extends Person {
     }
 
     public void deposit(int amount) {
-       
+
     }
 
     public Meal[] getmeals() {
