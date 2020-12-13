@@ -1,13 +1,9 @@
+public enum ClassDay  {
 
-    public enum ClassDay  {
-
-        SATURDAY,
-        SUNDAY,
-        MONDAY,
-        TUESDAY,
-        WEDNESDAY
-
-
-
-
+    SATURDAY,
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY
 }
+
