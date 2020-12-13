@@ -117,9 +117,45 @@ public class ProfessorPanel {
         frame.add(mainPanel);
     }
 
-    private void setStudentsPanel() {
+    private void setPersonalPanel() {
+        personalPanel = new JPanel();
+        personalPanel.setBounds(0, 0, 750, 575);
+        personalPanel.setLayout(null);
 
+        JLabel lblUsername = new JLabel("Username");
+        lblUsername.setBounds(30, 100, 150, 40);
+
+        JTextField txtUsername = new JTextField();
+        txtUsername.setBounds(120, 105, 200, 30);
+        txtUsername.setText(professor.getId());
+
+        JButton btnChangeUsername = new JButton("Change");
+
+
+        JLabel lblPassword = new JLabel("Password");
+        lblPassword.setBounds(30, 200, 150, 40);
+
+        JTextField txtPassword = new JTextField(professor.getPassword());
+        txtPassword.setBounds(120, 205, 200, 30);
+
+        JButton btnChangePassword = new JButton("Change");
+        btnChangePassword.setBounds(330, 205, 100, 30);
+        btnChangePassword.addActionListener(e -> {
+            professor.setPassword(txtPassword.getText());
+        });
+
+        personalPanel.add(lblUsername);
+        personalPanel.add(txtUsername);
+        personalPanel.add(btnChangeUsername);
+        personalPanel.add(btnChangePassword);
+        personalPanel.add(lblPassword);
+        personalPanel.add(txtPassword);
+
+        personalPanel.setVisible(false);
+
+        mainPanel.add(personalPanel);
     }
+
 
     private void setClassRoomsPanel() {
 
