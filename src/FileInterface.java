@@ -25,8 +25,19 @@ public interface FileInterface {
     }
 
     static List<Professor> allProfessor() {
-
+        List<Professor> list = new ArrayList<>();
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(professors))) {
+            while (true) {
+                Professor professor = (Professor) reader.readObject();
+                list.add(professor);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        return list;
     }
+
 
     static Student getStudent(String id) {
 
