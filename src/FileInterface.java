@@ -211,8 +211,39 @@ public interface FileInterface {
 
 
     static void updateProfessor(Professor prof) {
+        ObjectOutputStream writer = null;
+        ObjectInputStream reader = null;
 
+        try {
+            reader = new ObjectInputStream(new FileInputStream(professors));
+            writer = new ObjectOutputStream(new FileOutputStream(updater));
+            while (true) {
+                writer.writeObject(reader.readObject());
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
 
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(professors));
+            reader = new ObjectInputStream(new FileInputStream(updater));
+
+            while (true) {
+                Professor professor = (Professor) reader.readObject();
+                if (professor.equals(prof)) {
+                    professor = prof;
+                }
+                writer.writeObject(professor);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
     }
 
     static void updateAdmin(Admin admin) {
