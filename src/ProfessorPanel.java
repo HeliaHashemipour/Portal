@@ -1,9 +1,14 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class ProfessorPanel {
@@ -30,6 +35,8 @@ public class ProfessorPanel {
         setMainPanel();
 
         setMenu();
+
+        setPersonalPanel();
 
         setStudentsPanel();
 
@@ -93,6 +100,7 @@ public class ProfessorPanel {
         JButton logout = new JButton("Logout");
         logout.setBounds(20, 200, 210, 40);
         logout.addActionListener(e -> {
+            FileInterface.updateProfessor(professor);
             frame.dispose();
             new LoginPage();
         });
@@ -104,7 +112,6 @@ public class ProfessorPanel {
 
         frame.add(menu);
     }
-
 
     private void setMainPanel() {
         mainPanel = new JPanel();
@@ -130,7 +137,15 @@ public class ProfessorPanel {
         txtUsername.setText(professor.getId());
 
         JButton btnChangeUsername = new JButton("Change");
-
+        btnChangeUsername.setBounds(330, 105, 100, 30);
+        btnChangeUsername.addActionListener(e -> {
+            if (FileInterface.exists(txtUsername.getText(), new Admin())) {
+                txtUsername.setText("This username exist!");
+            } else {
+                FileInterface.updateProfessorsId(professor.getId(), txtUsername.getText());
+                professor.setId(txtUsername.getText());
+            }
+        });
 
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setBounds(30, 200, 150, 40);
@@ -155,7 +170,6 @@ public class ProfessorPanel {
 
         mainPanel.add(personalPanel);
     }
-
 
     private void setStudentsPanel() {
         studentsPanel = new JPanel();
@@ -184,9 +198,26 @@ public class ProfessorPanel {
 
         JTable studentsTable = new JTable(model);
 
+        TableCellRenderer renderer = (table, value, isSelected, hasFocus, row, column) -> (JButton) value;
+
+        studentsTable.getColumn("SetGrade").setCellRenderer(renderer);
+
+        studentsTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = studentsTable.rowAtPoint(e.getPoint());
+                int column = studentsTable.columnAtPoint(e.getPoint());
+                if (column == 3) {
+                    Classroom classroom = (Classroom) cmbClassrooms.getSelectedItem();
+                    setStudentsGrade(classroom.getStudents().get(row), classroom);
+                }
+            }
+        });
+
         cmbClassrooms.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 studentsTable.setModel(new DefaultTableModel(getStudents((Classroom) e.getItem()), columnNames));
+                studentsTable.getColumn("SetGrade").setCellRenderer(renderer);
                 studentsTable.repaint();
             }
         });
@@ -201,6 +232,7 @@ public class ProfessorPanel {
 
         mainPanel.add(studentsPanel);
     }
+
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
         classRoomsPanel.setBounds(0, 0, 750, 575);
@@ -217,6 +249,23 @@ public class ProfessorPanel {
         };
 
         JTable table = new JTable(model);
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int column = table.columnAtPoint(e.getPoint());
+                if (column == 5) {
+                    professor.getClassrooms().remove(row);
+                    frame.dispose();
+                    new ProfessorPanel(professor);
+                }
+            }
+        });
+
+        TableCellRenderer renderer = (table1, value, isSelected, hasFocus, row, column) -> (JButton) value;
+        table.getColumn("Delete").setCellRenderer(renderer);
+
         JScrollPane sp = new JScrollPane(table);
         sp.setBounds(20, 20, 700, 450);
 
@@ -230,7 +279,6 @@ public class ProfessorPanel {
 
         mainPanel.add(classRoomsPanel);
     }
-
 
     private void addClassRoom() {
         JFrame addingClassroom = new JFrame("Adding Classroom");
@@ -324,6 +372,7 @@ public class ProfessorPanel {
 
         addingClassroom.setVisible(true);
     }
+
     private Object[][] getClassrooms() {
         List<Classroom> classrooms = professor.getClassrooms();
         Object[][] data = new Object[classrooms.size()][6];
@@ -362,7 +411,6 @@ public class ProfessorPanel {
         return data;
     }
 
-
     private void setStudentsGrade(Student st, Classroom classroom) {
         JFrame setGradeFrame = new JFrame(String.format("%s %s", st.getFirstName(), st.getLastName()));
         setGradeFrame.setLayout(null);
@@ -378,10 +426,9 @@ public class ProfessorPanel {
         btnSubmit.setBounds(135, 130, 100, 30);
         btnSubmit.addActionListener(e -> {
             List<Unit> units = st.getUnits();
-            for (Unit unit : units) {
-                if (unit.getClassroom().equals(classroom))
-                    unit.setGrade(Integer.parseInt(txtGrade.getText()));
-            }
+            professor.setGrade(st, classroom, Integer.parseInt(txtGrade.getText()));
+            FileInterface.updateStudent(st);
+            setGradeFrame.dispose();
         });
 
         setGradeFrame.add(lblGrade);
@@ -393,5 +440,3 @@ public class ProfessorPanel {
     }
 
 }
-
-
