@@ -1,12 +1,16 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentPanel {
+
     private final Student student;
     private final JFrame frame;
     private JPanel header;
@@ -15,6 +19,8 @@ public class StudentPanel {
     private JPanel personalPanel;
     private JPanel mealPanel;
     private JPanel classRoomsPanel;
+    private JPanel balancePanel;
+    private JTextField txtBalance;
 
 
     public StudentPanel(Student st) {
@@ -33,12 +39,17 @@ public class StudentPanel {
 
         setPersonalPanel();
 
+        setMealPanel();
+
         setClassRoomsPanel();
+
+        setBalancePanel();
 
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
+
     private void setHeader() {
         header = new JPanel();
         header.setBounds(0, 0, 1000, 125);
@@ -82,14 +93,16 @@ public class StudentPanel {
             personalPanel.setVisible(true);
             mealPanel.setVisible(false);
             classRoomsPanel.setVisible(false);
+            balancePanel.setVisible(false);
         });
 
-        JButton setMealPlan = new JButton("Change Meal Plan");
+        JButton setMealPlan = new JButton("Show Meal Plan");
         setMealPlan.setBounds(20, 80, 210, 40);
         setMealPlan.addActionListener(e -> {
             personalPanel.setVisible(false);
             mealPanel.setVisible(true);
             classRoomsPanel.setVisible(false);
+            balancePanel.setVisible(false);
         });
 
         JButton seeClassRooms = new JButton("Classrooms List");
@@ -98,11 +111,22 @@ public class StudentPanel {
             personalPanel.setVisible(false);
             mealPanel.setVisible(false);
             classRoomsPanel.setVisible(true);
+            balancePanel.setVisible(false);
+        });
+
+        JButton seeBalance = new JButton("Account Balance");
+        seeBalance.setBounds(20, 200, 210, 40);
+        seeBalance.addActionListener(e -> {
+            personalPanel.setVisible(false);
+            mealPanel.setVisible(false);
+            classRoomsPanel.setVisible(false);
+            balancePanel.setVisible(true);
         });
 
         JButton logout = new JButton("Logout");
-        logout.setBounds(20, 200, 210, 40);
+        logout.setBounds(20, 260, 210, 40);
         logout.addActionListener(e -> {
+            FileInterface.updateStudent(student);
             frame.dispose();
             new LoginPage();
         });
@@ -110,11 +134,11 @@ public class StudentPanel {
         menu.add(showPersonalInfo);
         menu.add(setMealPlan);
         menu.add(seeClassRooms);
+        menu.add(seeBalance);
         menu.add(logout);
 
         frame.add(menu);
     }
-
 
     private void setPersonalPanel() {
         personalPanel = new JPanel();
@@ -129,7 +153,15 @@ public class StudentPanel {
         txtUsername.setText(student .getId());
 
         JButton btnChangeUsername = new JButton("Change");
-
+        btnChangeUsername.setBounds(330, 105, 100, 30);
+        btnChangeUsername.addActionListener(e -> {
+            if (FileInterface.exists(txtUsername.getText(), new Admin())) {
+                txtUsername.setText("This username exist!");
+            } else {
+                FileInterface.updateStudentsId(student.getId(), txtUsername.getText());
+                student.setId(txtUsername.getText());
+            }
+        });
 
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setBounds(30, 200, 150, 40);
@@ -153,6 +185,54 @@ public class StudentPanel {
         mainPanel.add(personalPanel);
     }
 
+    private void setMealPanel() {
+        mealPanel = new JPanel();
+        mealPanel.setBounds(0, 0, 750, 575);
+        mealPanel.setLayout(null);
+
+        Object[][] data = getMeals();
+
+        String[] columnNames = {"Day", "Meal", "Cost", "Reserve"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable studentsTable = new JTable(model);
+
+        studentsTable.setFillsViewportHeight(true);
+
+        TableCellRenderer renderer = (table, value, isSelected, hasFocus, row, column) -> (JButton) value;
+
+        studentsTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = studentsTable.rowAtPoint(e.getPoint());
+                int column = studentsTable.columnAtPoint(e.getPoint());
+                if (column == 3 && student.reserveMeal(MealPlan.getMeals()[row])) {
+                    mealPanel.setVisible(false);
+                    balancePanel.setVisible(true);
+                    txtBalance.setText(student.getBalance() + "");
+                } else {
+                    System.out.println("Not enough balance");
+                }
+            }
+        });
+
+        studentsTable.getColumn("Reserve").setCellRenderer(renderer);
+
+        JScrollPane sp = new JScrollPane(studentsTable);
+        sp.setBounds(20, 20, 700, 460);
+
+        mealPanel.add(sp);
+        mealPanel.setVisible(false);
+
+        mainPanel.add(mealPanel);
+    }
+
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
         classRoomsPanel.setLayout(null);
@@ -160,7 +240,150 @@ public class StudentPanel {
 
         Object[][] data = getClassRooms();
 
-        String[] columnNames = {"Title", "Number Of Units", "Professor", "Class Time", "Class Day", "Delete"};
+        String[] columnNames = {"Title", "Number Of Units", "Professor", "Class Time", "Class Day", "Grade", "Delete"};
+
+        TableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable jTable = new JTable(model);
+
+
+        TableCellRenderer renderer = (table, value, isSelected, hasFocus, row, column) -> (JButton) value;
+
+        jTable.getColumn("Delete").setCellRenderer(renderer);
+
+        JScrollPane sp = new JScrollPane(jTable);
+        sp.setBounds(20, 20, 700, 460);
+
+        JButton addClassroom = new JButton("Add Unit");
+        addClassroom.setBounds(620, 495, 100, 30);
+        addClassroom.addActionListener(e -> addClassroom());
+
+        classRoomsPanel.setVisible(false);
+        classRoomsPanel.add(sp);
+        classRoomsPanel.add(addClassroom);
+
+        mainPanel.add(classRoomsPanel);
+    }
+
+    private void setBalancePanel() {
+        balancePanel = new JPanel();
+        balancePanel.setLayout(null);
+        balancePanel.setBounds(0, 0, 750, 575);
+
+        JLabel lblBalance = new JLabel("Balance");
+        lblBalance.setBounds(30, 100, 100, 30);
+
+        txtBalance = new JTextField();
+        txtBalance.setText(student.getBalance() + "");
+        txtBalance.setBounds(120, 100, 200, 30);
+        txtBalance.setEditable(false);
+
+        JLabel lblAmount = new JLabel("Amount");
+        lblAmount.setBounds(30, 300, 100, 30);
+        lblAmount.setVisible(false);
+
+        JTextField txtAmount = new JTextField();
+        txtAmount.setBounds(120, 300, 200, 30);
+        txtAmount.setVisible(false);
+
+        JButton btnSubmit = new JButton("Submit");
+        btnSubmit.setBounds(330, 300, 100, 30);
+        btnSubmit.setVisible(false);
+
+        JButton btnDeposit = new JButton("Deposit");
+        btnDeposit.setBounds(330, 100, 100, 30);
+        btnDeposit.addActionListener(e -> {
+            lblAmount.setVisible(true);
+            txtAmount.setVisible(true);
+            btnSubmit.setVisible(true);
+            btnDeposit.setEnabled(false);
+        });
+
+        btnSubmit.addActionListener(e -> {
+            student.deposit(Integer.parseInt(txtAmount.getText()));
+            txtBalance.setText(String.valueOf(student.getBalance()));
+            lblAmount.setVisible(false);
+            txtAmount.setVisible(false);
+            btnSubmit.setVisible(false);
+            btnDeposit.setEnabled(true);
+        });
+
+
+        balancePanel.add(lblBalance);
+        balancePanel.add(txtBalance);
+        balancePanel.add(lblAmount);
+        balancePanel.add(txtAmount);
+        balancePanel.add(btnDeposit);
+        balancePanel.add(btnSubmit);
+        balancePanel.setVisible(false);
+
+        mainPanel.add(balancePanel);
+    }
+
+    private Object[][] getMeals() {
+        Meal[] meals = FileInterface.getMeals();
+        Object[][] data = new Object[7][4];
+        for (int i = 0; i < 7; i++) {
+            data[i][0] = switch (i) {
+                case 0 -> "Saturday";
+                case 1 -> "Sunday";
+                case 2 -> "Monday";
+                case 3 -> "Tuesday";
+                case 4 -> "Wednesday";
+                case 5 -> "Thursday";
+                case 6 -> "Friday";
+                default -> null;
+            };
+            data[i][1] = meals[i].getName();
+            data[i][2] = meals[i].getCost();
+            JButton btnReserve = new JButton("Reserve");
+            int finalI = i;
+            btnReserve.addActionListener(e -> {
+                if (student.reserveMeal(meals[finalI])) {
+                    personalPanel.setVisible(true);
+                    mealPanel.setVisible(false);
+                } else {
+                    Border border = BorderFactory.createLineBorder(Color.RED);
+                    btnReserve.setBorder(border);
+                }
+            });
+            data[i][3] = btnReserve;
+        }
+        return data;
+    }
+
+    private Object[][] getClassRooms() {
+        List<Classroom> classrooms = new ArrayList<>();
+        for (Unit unit : student.getUnits()) {
+            classrooms.add(unit.getClassroom());
+        }
+        Object[][] data = new Object[classrooms.size()][6];
+        for (int i = 0; i < classrooms.size(); i++) {
+            data[i][0] = classrooms.get(i).getName();
+            data[i][1] = classrooms.get(i).getNumberOfUnit();
+            data[i][2] = "Mr. " + classrooms.get(i).getProfessor().getLastName();
+            data[i][3] = classrooms.get(i).getClassTime();
+            data[i][4] = classrooms.get(i).getClassDay();
+            data[i][5] = student.getUnits().get(i).getGrade();
+            JButton btnDelete = new JButton("Delete");
+            data[i][6] = btnDelete;
+        }
+        return data;
+    }
+
+    private void addClassroom() {
+        JFrame classroomsFrame = new JFrame("Classrooms");
+        classroomsFrame.setBounds(200, 200, 600, 500);
+        classroomsFrame.setLayout(null);
+
+        Object[][] data = getAllClassRooms();
+
+        String[] columnNames = {"Name", "NumberOfUnits", "Time", "Day", "Professor", "Select"};
 
         TableModel model = new DefaultTableModel(data, columnNames) {
             @Override
@@ -171,13 +394,31 @@ public class StudentPanel {
 
         JTable table = new JTable(model);
 
+        TableCellRenderer renderer = (table1, value, isSelected, hasFocus, row, column) -> (JButton) value;
+
+        table.getColumn("Select").setCellRenderer(renderer);
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int column = table.columnAtPoint(e.getPoint());
+                Classroom classroom;
+                if (column == 5 && student.addUnit(classroom = FileInterface.allClassrooms().get(row))) {
+                    classroom.addStudent(student);
+                    FileInterface.updateProfessor(classroom.getProfessor());
+                    classroomsFrame.dispose();
+                    frame.dispose();
+                    new StudentPanel(student);
+                }
+            }
+        });
+
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(20, 20, 700, 460);
+        sp.setBounds(30, 20, 540, 430);
 
-        classRoomsPanel.setVisible(false);
-        classRoomsPanel.add(sp);
-
-        mainPanel.add(classRoomsPanel);
+        classroomsFrame.add(sp);
+        classroomsFrame.setVisible(true);
     }
 
     private Object[][] getAllClassRooms() {
@@ -213,7 +454,3 @@ public class StudentPanel {
         return data;
     }
 }
-
-}
-
-
