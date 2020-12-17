@@ -339,7 +339,37 @@ public interface FileInterface {
 
 
     static void updateAdminId(String oldId, String newId) {
+        ObjectOutputStream writer = null;
+        ObjectInputStream reader = null;
+        try {
+            reader = new ObjectInputStream(new FileInputStream(admins));
+            writer = new ObjectOutputStream(new FileOutputStream(updater));
+            while (true) {
+                writer.writeObject(reader.readObject());
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(admins));
+            reader = new ObjectInputStream(new FileInputStream(updater));
+            while (true) {
+                Admin admin = (Admin) reader.readObject();
+                if (admin.getId().equals(oldId)) {
+                    admin.setId(newId);
+                }
 
+                writer.writeObject(admin);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
     }
 
     static List<Classroom> allClassrooms () {
