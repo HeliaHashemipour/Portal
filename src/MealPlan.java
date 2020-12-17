@@ -1,6 +1,18 @@
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public class MealPlan {
 
     private static Meal[] meals;
+
+    static {
+        meals = new Meal[7];
+        for (int i = 0; i < 7; i++) {
+            meals[i] = new Meal();
+        }
+    }
 
     public static void setMeals(Meal[] meals) {
         MealPlan.meals = meals;
