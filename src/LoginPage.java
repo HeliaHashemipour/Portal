@@ -81,5 +81,33 @@ public class LoginPage {
     }
 
     private int login(String id, String password, String role) {
+        switch (role) {
+            case "Admin":
+                Admin admin = FileInterface.getAdmin(id);
+                if (admin == null)
+                    return -1;
+                if (!admin.getPassword().equals(password))
+                    return 0;
+                new AdminPanel(admin);
+                return 1;
+            case "Professor":
+                Professor professor = FileInterface.getProfessor(id);
+                if (professor == null)
+                    return -1;
+                if (!professor.getPassword().equals(password))
+                    return 0;
+                new ProfessorPanel(professor);
+                return 1;
+            case "Student":
+                Student student = FileInterface.getStudent(id);
+                if (student == null)
+                    return -1;
+                if (!student.getPassword().equals(password))
+                    return 0;
+                new StudentPanel(student);
+                return 1;
+            default:
+                return -1;
+        }
     }
 }
