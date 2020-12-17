@@ -403,8 +403,20 @@ public interface FileInterface {
 
 
     private static void checkAndClose (ObjectInputStream reader, ObjectOutputStream writer){
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException var4) {
+                var4.printStackTrace();
+            }
+        }
 
-
-
+        if (writer != null) {
+            try {
+                writer.close();
+            } catch (IOException var3) {
+                var3.printStackTrace();
+            }
+        }
     }
 }
