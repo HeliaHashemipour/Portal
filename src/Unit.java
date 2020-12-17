@@ -1,4 +1,11 @@
-public class Unit {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Unit implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -8744629711481128915L;
+
     private int grade;
     private Classroom classroom;
 
