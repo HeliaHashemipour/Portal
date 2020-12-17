@@ -1,6 +1,12 @@
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Person {
+public abstract class Person implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 4605491601859615470L;
+
     private String firstName;
     private String lastName;
     private String id;
