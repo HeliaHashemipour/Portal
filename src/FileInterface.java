@@ -373,7 +373,11 @@ public interface FileInterface {
     }
 
     static List<Classroom> allClassrooms () {
-
+        List<Classroom> list = new ArrayList<>();
+        for (int i = 0; i < allProfessor().size(); i++) {
+            list.addAll(allProfessor().get(i).getClassrooms());
+        }
+        return list;
     }
 
     static void writeMeals() {
