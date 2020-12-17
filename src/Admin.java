@@ -10,15 +10,13 @@ public class Admin extends Person {
     }
 
     public List<Professor> getProfessors() {
-
+        return FileInterface.allProfessor();
     }
 
     public boolean addProfessor(Professor professor) {
-
+        return FileInterface.addProfessor(professor);
     }
 
-    public boolean addStudent(Student student) {
-
+    public boolean addStudent(Student student) { return FileInterface.addStudent(student);
     }
-
 }
