@@ -381,8 +381,13 @@ public interface FileInterface {
     }
 
     static void writeMeals() {
-
+        try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(mealPlan))){
+            writer.writeObject(MealPlan.getMeals());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     static Meal[] getMeals() {
 
