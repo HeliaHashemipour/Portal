@@ -231,10 +231,11 @@ public class ProfessorPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+
     private void addClassRoom() {
-        JFrame addingProfessorFrame = new JFrame("Adding student");
-        addingProfessorFrame.setLayout(null);
-        addingProfessorFrame.setBounds(300, 300, 370, 500);
+        JFrame addingClassroom = new JFrame("Adding Classroom");
+        addingClassroom.setLayout(null);
+        addingClassroom.setBounds(300, 300, 370, 500);
 
         JLabel lblName = new JLabel("Name:");
         lblName.setBounds(30, 50, 100, 30);
@@ -282,28 +283,84 @@ public class ProfessorPanel {
             classroom.setName(txtName.getText());
             classroom.setNumberOfUnit(Integer.parseInt(txtNumberOfUnits.getText()));
             classroom.setCapacity(Integer.parseInt(txtCapacity.getText()));
-
+            classroom.setClassTime(
+                    switch (cmbTime.getSelectedIndex()) {
+                        case 0 -> ClassTime.FIRST;
+                        case 1 -> ClassTime.SECOND;
+                        case 2 -> ClassTime.THIRD;
+                        case 3 -> ClassTime.FORTH;
+                        default -> null;
+                    }
+            );
+            classroom.setClassDay(
+                    switch (cmbDay.getSelectedIndex()) {
+                        case 0 -> ClassDay.SATURDAY;
+                        case 1 -> ClassDay.SUNDAY;
+                        case 2 -> ClassDay.MONDAY;
+                        case 3 -> ClassDay.TUESDAY;
+                        case 4 -> ClassDay.WEDNESDAY;
+                        default -> null;
+                    }
+            );
             classroom.setProfessor(professor);
             professor.createClassroom(classroom);
+            addingClassroom.dispose();
+            frame.dispose();
+            new ProfessorPanel(professor);
         });
 
 
-        addingProfessorFrame.add(lblName);
-        addingProfessorFrame.add(lblNumberOfUnits);
-        addingProfessorFrame.add(lblCapacity);
-        addingProfessorFrame.add(lblDay);
-        addingProfessorFrame.add(lblTime);
-        addingProfessorFrame.add(txtName);
-        addingProfessorFrame.add(txtNumberOfUnits);
-        addingProfessorFrame.add(txtCapacity);
-        addingProfessorFrame.add(cmbDay);
-        addingProfessorFrame.add(cmbTime);
-        addingProfessorFrame.add(btnAdd);
+        addingClassroom.add(lblName);
+        addingClassroom.add(lblNumberOfUnits);
+        addingClassroom.add(lblCapacity);
+        addingClassroom.add(lblDay);
+        addingClassroom.add(lblTime);
+        addingClassroom.add(txtName);
+        addingClassroom.add(txtNumberOfUnits);
+        addingClassroom.add(txtCapacity);
+        addingClassroom.add(cmbDay);
+        addingClassroom.add(cmbTime);
+        addingClassroom.add(btnAdd);
 
-        addingProfessorFrame.setVisible(true);
+        addingClassroom.setVisible(true);
+    }
+    private Object[][] getClassrooms() {
+        List<Classroom> classrooms = professor.getClassrooms();
+        Object[][] data = new Object[classrooms.size()][6];
+        for (int i = 0; i < classrooms.size(); i++) {
+            data[i][0] = classrooms.get(i).getName();
+            data[i][1] = classrooms.get(i).getNumberOfUnit();
+            data[i][2] = classrooms.get(i).getCapacity();
+            data[i][3] = classrooms.get(i).getClassTime();
+            data[i][4] = classrooms.get(i).getClassDay();
+            JButton delete = new JButton("Delete");
+            int finalI = i;
+            delete.addActionListener(e -> {
+                professor.removeClassroom(classrooms.get(finalI));
+                frame.dispose();
+                new ProfessorPanel(professor);
+            });
+            data[i][5] = delete;
+        }
+        return data;
     }
 
-
+    private Object[][] getStudents(Classroom classroom) {
+        if (classroom == null)
+            return null;
+        List<Student> students = classroom.getStudents();
+        Object[][] data = new Object[students.size()][4];
+        for (int i = 0; i < students.size(); i++) {
+            data[i][0] = students.get(i).getFirstName();
+            data[i][1] = students.get(i).getLastName();
+            data[i][2] = students.get(i).getId();
+            JButton btnSetGrade = new JButton("Set");
+            int finalI = i;
+            btnSetGrade.addActionListener(e -> setStudentsGrade(students.get(finalI), classroom));
+            data[i][3] = btnSetGrade;
+        }
+        return data;
+    }
 
 
     private void setStudentsGrade(Student st, Classroom classroom) {
