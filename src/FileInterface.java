@@ -390,9 +390,17 @@ public interface FileInterface {
 
 
     static Meal[] getMeals() {
-
-
+        Meal[] meals = new Meal[7];
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(mealPlan))){
+            meals = (Meal[]) reader.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        MealPlan.setMeals(meals);
+        return meals;
     }
+
 
     private static void checkAndClose (ObjectInputStream reader, ObjectOutputStream writer){
 
