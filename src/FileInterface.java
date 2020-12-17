@@ -11,7 +11,17 @@ public interface FileInterface {
     File updater = new File("src/file/Updater.dat");
 
     static List<Student> allStudents() {
-      
+        List<Student> list = new ArrayList<>();
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(students))) {
+            while (true) {
+                Student std = (Student) reader.readObject();
+                list.add(std);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        return list;
     }
 
     static List<Professor> allProfessor() {
