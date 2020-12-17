@@ -38,7 +38,6 @@ public interface FileInterface {
         return list;
     }
 
-
     static Student getStudent(String id) {
         Student student = null;
         try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(students))) {
@@ -136,6 +135,7 @@ public interface FileInterface {
         return flag;
     }
 
+
     static boolean addProfessor(Professor professor) {
         ObjectOutputStream writer = null;
         ObjectInputStream reader = null;
@@ -175,7 +175,6 @@ public interface FileInterface {
         return flag;
     }
 
-
     static void updateStudent(Student st) {
         ObjectOutputStream writer = null;
         ObjectInputStream reader = null;
@@ -208,7 +207,6 @@ public interface FileInterface {
             checkAndClose(reader, writer);
         }
     }
-
 
     static void updateProfessor(Professor prof) {
         ObjectOutputStream writer = null;
@@ -303,7 +301,6 @@ public interface FileInterface {
         }
     }
 
-
     static void updateProfessorsId(String oldId, String newId) {
         ObjectOutputStream writer = null;
         ObjectInputStream reader = null;
@@ -336,7 +333,6 @@ public interface FileInterface {
             checkAndClose(reader, writer);
         }
     }
-
 
     static void updateAdminId(String oldId, String newId) {
         ObjectOutputStream writer = null;
@@ -388,7 +384,6 @@ public interface FileInterface {
         }
     }
 
-
     static Meal[] getMeals() {
         Meal[] meals = new Meal[7];
         try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(mealPlan))){
@@ -400,7 +395,6 @@ public interface FileInterface {
         MealPlan.setMeals(meals);
         return meals;
     }
-
 
     private static void checkAndClose (ObjectInputStream reader, ObjectOutputStream writer){
         if (reader != null) {
