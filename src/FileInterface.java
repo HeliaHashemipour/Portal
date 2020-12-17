@@ -177,8 +177,38 @@ public interface FileInterface {
 
 
     static void updateStudent(Student st) {
-
+        ObjectOutputStream writer = null;
+        ObjectInputStream reader = null;
+        try {
+            reader = new ObjectInputStream(new FileInputStream(students));
+            writer = new ObjectOutputStream(new FileOutputStream(updater));
+            while (true) {
+                writer.writeObject(reader.readObject());
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(students));
+            reader = new ObjectInputStream(new FileInputStream(updater));
+            while (true) {
+                Student student = (Student) reader.readObject();
+                if (student.equals(st)) {
+                    student = st;
+                }
+                writer.writeObject(student);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
     }
+
 
     static void updateProfessor(Professor prof) {
 
