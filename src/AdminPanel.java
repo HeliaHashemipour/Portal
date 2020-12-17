@@ -3,9 +3,13 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminPanel {
+
     private JFrame frame;
     private JPanel header;
     private JPanel menu;
@@ -43,7 +47,6 @@ public class AdminPanel {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
     }
 
     private void setHeader() {
@@ -163,6 +166,15 @@ public class AdminPanel {
         txtUsername.setText(admin.getId());
 
         JButton btnChangeUsername = new JButton("Change");
+        btnChangeUsername.setBounds(330, 105, 100, 30);
+        btnChangeUsername.addActionListener(e -> {
+            if (FileInterface.exists(txtUsername.getText(), new Admin())) {
+                txtUsername.setText("This username exist!");
+            } else {
+                FileInterface.updateAdminId(admin.getId(), txtUsername.getText());
+                admin.setId(txtUsername.getText());
+            }
+        });
 
         JLabel lblPassword = new JLabel("Password");
         lblPassword.setBounds(30, 200, 150, 40);
@@ -186,8 +198,6 @@ public class AdminPanel {
         personalPanel.setVisible(false);
 
         mainPanel.add(personalPanel);
-
-
     }
 
     private void setMealPanel() {
@@ -199,6 +209,7 @@ public class AdminPanel {
         JLabel[] lblMealCosts = new JLabel[7];
         JTextField[] txtMealNames = new JTextField[7];
         JTextField[] txtMealCosts = new JTextField[7];
+        Meal[] meals = FileInterface.getMeals();
 
         for (int i = 0; i < 7; i++) {
             lblMealNames[i] = new JLabel("Name");
@@ -206,12 +217,14 @@ public class AdminPanel {
 
             txtMealNames[i] = new JTextField();
             txtMealNames[i].setBounds(80, 56 + 60 * i, 200, 30);
+            txtMealNames[i].setText(meals[i].getName());
 
             lblMealCosts[i] = new JLabel("Cost");
             lblMealCosts[i].setBounds(320, 50 + 60 * i, 100, 40);
 
             txtMealCosts[i] = new JTextField();
             txtMealCosts[i].setBounds(370, 56 + 60 * i, 200, 30);
+            txtMealCosts[i].setText(meals[i].getCost() + "");
 
             mealPanel.add(lblMealNames[i]);
             mealPanel.add(txtMealNames[i]);
@@ -222,22 +235,24 @@ public class AdminPanel {
         JButton btnCancel = new JButton("Cancel");
         btnCancel.setBounds(620, 480, 90, 30);
         btnCancel.addActionListener(e -> {
-            Meal[] meals = MealPlan.getMeals();
-            for (int i = 0; i < meals.length; i++) {
-                txtMealNames[i].setText(meals[i].getName());
-                txtMealCosts[i].setText(String.valueOf(meals[i].getCost()));
+            Meal[] meals1 = MealPlan.getMeals();
+            for (int i = 0; i < meals1.length; i++) {
+                txtMealNames[i].setText(meals1[i].getName());
+                txtMealCosts[i].setText(String.valueOf(meals1[i].getCost()));
             }
         });
 
         JButton btnApply = new JButton("Apply");
         btnApply.setBounds(510, 480, 90, 30);
         btnApply.addActionListener(e -> {
-            Meal[] meals = new Meal[7];
+            Meal[] meals1 = new Meal[7];
             for (int i = 0; i < 7; i++) {
-                meals[i].setName(txtMealNames[i].getText());
-                meals[i].setCost(Integer.parseInt(txtMealCosts[i].getText()));
+                meals1[i] = new Meal();
+                meals1[i].setName(txtMealNames[i].getText());
+                meals1[i].setCost(Integer.parseInt(txtMealCosts[i].getText()));
             }
-            MealPlan.setMeals(meals);
+            MealPlan.setMeals(meals1);
+            FileInterface.writeMeals();
         });
 
         mealPanel.add(btnCancel);
@@ -246,7 +261,6 @@ public class AdminPanel {
         mealPanel.setVisible(false);
 
         mainPanel.add(mealPanel);
-
     }
 
     private void setStudentsPanel() {
@@ -309,30 +323,6 @@ public class AdminPanel {
 
         mainPanel.add(professorsPanel);
     }
-    private String[][] getStudents() {
-        List<Student> students = FileInterface.allStudents();
-        String[][] data = new String[students.size()][5];
-        for (int i = 0; i < students.size(); i++) {
-            data[i][0] = students.get(i).getFirstName();
-            data[i][1] = students.get(i).getLastName();
-            data[i][2] = students.get(i).getId();
-            data[i][3] = students.get(i).getPassword();
-            data[i][4] = String.valueOf(students.get(i).averageGrade());
-        }
-        return data;
-    }
-
-    private String[][] getProfessors() {
-        List<Professor> professors = FileInterface.allProfessor();
-        String[][] data = new String[professors.size()][4];
-        for (int i = 0; i < professors.size(); i++) {
-            data[i][0] = professors.get(i).getFirstName();
-            data[i][1] = professors.get(i).getLastName();
-            data[i][2] = professors.get(i).getId();
-            data[i][3] = professors.get(i).getPassword();
-        }
-        return data;
-    }
 
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
@@ -359,6 +349,30 @@ public class AdminPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+    private String[][] getStudents() {
+        List<Student> students = FileInterface.allStudents();
+        String[][] data = new String[students.size()][5];
+        for (int i = 0; i < students.size(); i++) {
+            data[i][0] = students.get(i).getFirstName();
+            data[i][1] = students.get(i).getLastName();
+            data[i][2] = students.get(i).getId();
+            data[i][3] = students.get(i).getPassword();
+            data[i][4] = String.valueOf(students.get(i).averageGrade());
+        }
+        return data;
+    }
+
+    private String[][] getProfessors() {
+        List<Professor> professors = FileInterface.allProfessor();
+        String[][] data = new String[professors.size()][4];
+        for (int i = 0; i < professors.size(); i++) {
+            data[i][0] = professors.get(i).getFirstName();
+            data[i][1] = professors.get(i).getLastName();
+            data[i][2] = professors.get(i).getId();
+            data[i][3] = professors.get(i).getPassword();
+        }
+        return data;
+    }
 
     private void addStudent() {
         JFrame addingStudentFrame = new JFrame("Adding student");
@@ -471,7 +485,6 @@ public class AdminPanel {
         addingProfessorFrame.add(btnAdd);
 
         addingProfessorFrame.setVisible(true);
-
     }
 
     private String[][] getClassrooms() {
@@ -488,6 +501,5 @@ public class AdminPanel {
         return data;
     }
 
+
 }
-
-
