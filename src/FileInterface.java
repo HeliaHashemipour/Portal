@@ -40,7 +40,18 @@ public interface FileInterface {
 
 
     static Student getStudent(String id) {
-
+        Student student = null;
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(students))) {
+            while (true) {
+                student = (Student) reader.readObject();
+                if (student.getId().equals(id))
+                    return student;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        return null;
     }
 
 
