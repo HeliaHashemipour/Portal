@@ -1,17 +1,26 @@
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Classroom  {
+public class Classroom implements Serializable {
 
+
+    @Serial
+    private static final long serialVersionUID = -8603258451909863723L;
 
     private String name;
     private int numberOfUnit;
     private int capacity;
     private ClassTime classTime;
     private ClassDay classDay;
-    private List<Student> students;
+    private final List<Student> students;
     private Professor professor;
-    private Unit unit;
+
+    public Classroom() {
+        students = new ArrayList<>();
+    }
 
     public String getName() {
         return name;
@@ -53,8 +62,6 @@ public class Classroom  {
 
     public List<Student> getStudents(){ return students; }
 
-    public Unit getUnit() { return unit; }
-
     @Override
     public String toString() {
         return name;
@@ -66,6 +73,12 @@ public class Classroom  {
 
     public void setClassDay(ClassDay classDay) {
         this.classDay = classDay;
+    }
+
+    public boolean addStudent(Student st) {
+        if (students.contains(st))
+            return false;
+        return students.add(st);
     }
 
     @Override
