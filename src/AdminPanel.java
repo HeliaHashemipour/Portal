@@ -450,7 +450,19 @@ public class AdminPanel {
 
     }
 
-
+    private String[][] getClassrooms() {
+        List<Classroom> classrooms = FileInterface.allClassrooms();
+        String[][] data = new String[classrooms.size()][6];
+        for (int i = 0; i < classrooms.size(); i++) {
+            data[i][0] = classrooms.get(i).getName();
+            data[i][1] = String.valueOf(classrooms.get(i).getNumberOfUnit());
+            data[i][2] = String.valueOf(classrooms.get(i).getCapacity());
+            data[i][3] = classrooms.get(i).getClassTime().toString();
+            data[i][4] = classrooms.get(i).getClassDay().toString();
+            data[i][5] = "Prof. " + classrooms.get(i).getProfessor().getLastName();
+        }
+        return data;
+    }
 
 }
 
