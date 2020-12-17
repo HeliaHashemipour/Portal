@@ -56,18 +56,46 @@ public interface FileInterface {
 
 
     static Professor getProfessor(String id) {
-
-
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(FileInterface.professors));) {
+            while (true) {
+                Professor professor = (Professor) reader.readObject();
+                if (professor.getId().equals(id))
+                    return professor;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        return null;
     }
 
 
     static Admin getAdmin(String id) {
-
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(admins))) {
+            while (true) {
+                Admin admin = (Admin) reader.readObject();
+                if (admin.getId().equals(id))
+                    return admin;
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        }
+        return null;
     }
 
     static boolean exists(String id, Person person) {
+        boolean exist = false;
+        if (person instanceof Student) {
+            if (getStudent(id) != null)
+                exist = true;
+        }
+        if (person instanceof Professor) {
+            if (getProfessor(id) != null)
+                exist = true;
+        }
+        return exist;
     }
-
 
     static boolean addProfessor(Professor professor) {
 
