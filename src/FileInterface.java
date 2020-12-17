@@ -247,6 +247,27 @@ public interface FileInterface {
     }
 
     static void updateAdmin(Admin admin) {
+        ObjectOutputStream writer = null;
+        ObjectInputStream reader = null;
+
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(admins));
+            reader = new ObjectInputStream(new FileInputStream(updater));
+
+            while (true) {
+                Admin currentAdmin = (Admin) reader.readObject();
+                if (currentAdmin.equals(admin)) {
+                    currentAdmin = admin;
+                }
+
+                writer.writeObject(currentAdmin);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
     }
 
     static void updateStudentsId(String oldId, String newId) {
