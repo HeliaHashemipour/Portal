@@ -309,6 +309,30 @@ public class AdminPanel {
 
         mainPanel.add(professorsPanel);
     }
+    private String[][] getStudents() {
+        List<Student> students = FileInterface.allStudents();
+        String[][] data = new String[students.size()][5];
+        for (int i = 0; i < students.size(); i++) {
+            data[i][0] = students.get(i).getFirstName();
+            data[i][1] = students.get(i).getLastName();
+            data[i][2] = students.get(i).getId();
+            data[i][3] = students.get(i).getPassword();
+            data[i][4] = String.valueOf(students.get(i).averageGrade());
+        }
+        return data;
+    }
+
+    private String[][] getProfessors() {
+        List<Professor> professors = FileInterface.allProfessor();
+        String[][] data = new String[professors.size()][4];
+        for (int i = 0; i < professors.size(); i++) {
+            data[i][0] = professors.get(i).getFirstName();
+            data[i][1] = professors.get(i).getLastName();
+            data[i][2] = professors.get(i).getId();
+            data[i][3] = professors.get(i).getPassword();
+        }
+        return data;
+    }
 
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
