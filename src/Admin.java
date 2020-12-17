@@ -6,7 +6,7 @@ public class Admin extends Person {
     }
 
     public List<Student> getStudents() {
-
+        return FileInterface.allStudents();
     }
 
     public List<Professor> getProfessors() {
