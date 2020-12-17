@@ -97,9 +97,46 @@ public interface FileInterface {
         return exist;
     }
 
-    static boolean addProfessor(Professor professor) {
+    static boolean addStudent(Student st) {
+        ObjectOutputStream writer = null;
+        ObjectInputStream reader = null;
+        boolean flag = false;
 
+        try {
+            reader = new ObjectInputStream(new FileInputStream(students));
+            writer = new ObjectOutputStream(new FileOutputStream(updater));
+            while (true) {
+                writer.writeObject(reader.readObject());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(students));
+            reader = new ObjectInputStream(new FileInputStream(updater));
+            while (true) {
+                writer.writeObject(reader.readObject());
+            }
+        } catch (EOFException e) {
+            try {
+                writer.writeObject(st);
+                flag = true;
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            if (!(e instanceof EOFException))
+                e.printStackTrace();
+        } finally {
+            checkAndClose(reader, writer);
+        }
+        return flag;
     }
+
+
 
     static void updateStudent(Student st) {
 
