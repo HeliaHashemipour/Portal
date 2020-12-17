@@ -180,6 +180,39 @@ public class StudentPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+    private Object[][] getAllClassRooms() {
+        List<Classroom> classrooms = FileInterface.allClassrooms();
+        List<Classroom> selectedClassrooms = new ArrayList<>();
+        for (Unit unit : student.getUnits()) {
+            selectedClassrooms.add(unit.getClassroom());
+        }
+        Object[][] data = new Object[classrooms.size() - selectedClassrooms.size()][6];
+        int i = 0;
+        int index = 0;
+        while (index < classrooms.size() && i < data.length) {
+            Classroom classroom;
+            if (!selectedClassrooms.contains(classroom = classrooms.get(index))) {
+                data[i][0] = classroom.getName();
+                data[i][1] = classroom.getNumberOfUnit();
+                data[i][2] = classroom.getClassTime();
+                data[i][3] = classroom.getClassDay();
+                data[i][4] = "MR. " + classroom.getProfessor().getLastName();
+                JButton btnSelect = new JButton("Select");
+                btnSelect.addActionListener(e -> {
+                    Unit unit = new Unit();
+                    unit.setClassroom(classroom);
+                    classroom.addStudent(student);
+                });
+                data[i][5] = btnSelect;
+                i++;
+                index++;
+            } else {
+                index++;
+            }
+        }
+        return data;
+    }
+}
 
 }
 
