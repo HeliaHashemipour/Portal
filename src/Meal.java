@@ -1,10 +1,20 @@
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Meal {
+public class Meal implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2871764622758109040L;
 
     private String name;
     private int cost;
-    private List<Student> students;
+    private final List<Student> students;
+
+    public Meal() {
+        students = new ArrayList<>();
+    }
 
     public String getName() {
         return name;
@@ -32,6 +42,3 @@ public class Meal {
         return students.add(st);
     }
 }
-
-
-
