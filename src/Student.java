@@ -5,6 +5,8 @@ import java.util.List;
 /**
  * This class represents the students of this application.
  * this means every instance of this class is a student.
+ * @Hashemipour
+ * @since 2020
  */
 public class Student extends Person {
 

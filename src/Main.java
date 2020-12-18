@@ -5,6 +5,8 @@ import java.io.ObjectOutputStream;
 
 /**
  * The main class of this application
+ * @Hashemipour
+ * @since 2020
  */
 public class Main {
 

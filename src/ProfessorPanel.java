@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * This class creates a new professors panel and shows it for the user.
+ * @Hashemipour
+ * @since 2020
  */
 public class ProfessorPanel {
 

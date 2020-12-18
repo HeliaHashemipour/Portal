@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * This interface contacts with the files and change 'em.
+ * @Hashemipour
+ * @since 2020
  */
 public interface FileInterface {
 

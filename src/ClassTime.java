@@ -2,6 +2,8 @@ import java.io.Serializable;
 
 /**
  * This enumeration represents the class time of the classrooms.
+ * @Hashemipour
+ * @since 2020
  */
 public enum ClassTime implements Serializable {
 

@@ -6,6 +6,8 @@ import java.util.List;
 /**
  * This class represents a meal for students
  * It means that every instance of this class is a meal.
+ * @Hashemipour
+ * @since 2020
  */
 public class Meal implements Serializable {
 

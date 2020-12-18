@@ -15,6 +15,8 @@ import java.util.List;
 
 /**
  * This class show a panel for every student.
+ * @Hashemipour
+ * @since 2020
  */
 public class StudentPanel {
 

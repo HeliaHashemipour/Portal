@@ -8,6 +8,8 @@ import java.util.Objects;
  * This class represents Classroom of the university.
  * this means every instance of this class is a class room that students can join and learn
  * and professors can create classrooms and delete 'em from database.
+ * @Hashemipour
+ * @since 2020
  */
 public class Classroom implements Serializable {
 

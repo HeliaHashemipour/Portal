@@ -4,6 +4,8 @@ import java.util.Objects;
 
 /**
  * This class is the super class of every role in this application.
+ * @Hashemipour
+ * @since 2020
  */
 public abstract class Person implements Serializable {
 

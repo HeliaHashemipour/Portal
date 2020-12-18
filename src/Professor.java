@@ -5,6 +5,8 @@ import java.util.List;
 /**
  * This class represents the professor role of this application.
  * this means every instance of this class is a professor.
+ * @Hashemipour
+ * @since 2020
  */
 public class Professor extends Person {
 

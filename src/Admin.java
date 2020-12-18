@@ -5,6 +5,8 @@ import java.util.List;
 /**
  * This class represents admin of this system
  * every instance of this class is has role of admin and can access admin panel.
+ * @Hashemipour
+ * @since 2020
  */
 public class Admin extends Person {
 

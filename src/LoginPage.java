@@ -10,6 +10,8 @@ import java.net.URL;
 
 /**
  * This class designs and shows the login page of this application.
+ * @Hashemipour
+ * @since 2020
  */
 public class LoginPage {
 

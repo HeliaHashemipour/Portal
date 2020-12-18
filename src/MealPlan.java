@@ -5,6 +5,8 @@ import java.io.ObjectOutputStream;
 
 /**
  * The meal paln of this week
+ * @Hashemipour
+ * @since 2020
  */
 public class MealPlan {
 
