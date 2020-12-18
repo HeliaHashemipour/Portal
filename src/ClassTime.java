@@ -1,4 +1,7 @@
-public enum ClassTime {
+import java.io.Serializable;
+
+public enum ClassTime implements Serializable {
+
     FIRST,
     SECOND,
     THIRD,
@@ -9,10 +12,8 @@ public enum ClassTime {
         return switch (this) {
             case FIRST -> "8 - 10";
             case SECOND -> "10 - 12";
-            case THIRD -> "2 - 4";
-            case FORTH -> "4 - 6";
+            case THIRD -> "14 - 16";
+            case FORTH -> "16 - 18";
         };
     }
 }
-
-
