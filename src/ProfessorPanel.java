@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.TableModelEvent;
@@ -9,6 +10,9 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class ProfessorPanel {
@@ -60,7 +64,20 @@ public class ProfessorPanel {
         greeting.setFont(font);
         greeting.setBounds(20, 50, 700, 20);
 
+        JLabel lblIcon = new JLabel();
+        lblIcon.setBounds(887, 13, 100, 100);
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/Professor-icon.png"));
+            Image image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            lblIcon.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         header.add(greeting);
+        header.add(lblIcon);
 
         frame.add(header);
     }
@@ -188,6 +205,18 @@ public class ProfessorPanel {
         }
         cmbClassrooms.setBounds(100, 10, 150, 30);
 
+        JLabel lblIcon = new JLabel();
+        lblIcon.setBounds(270, 5, 40, 40);
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/StudentList.PNG"));
+            Image image = bufferedImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            lblIcon.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
             @Override
@@ -228,6 +257,7 @@ public class ProfessorPanel {
         studentsPanel.add(lblClassroom);
         studentsPanel.add(cmbClassrooms);
         studentsPanel.add(sp);
+        studentsPanel.add(lblIcon);
         studentsPanel.setVisible(false);
 
         mainPanel.add(studentsPanel);
