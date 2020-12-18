@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -5,6 +6,9 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +48,7 @@ public class AdminPanel {
 
         setClassRoomsPanel();
 
+
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -62,8 +67,20 @@ public class AdminPanel {
         greeting.setFont(font);
         greeting.setBounds(20, 50, 700, 20);
 
-        header.add(greeting);
+        JLabel lblIcon = new JLabel();
+        lblIcon.setBounds(887, 13, 100, 100);
 
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/Admin.PNG"));
+            Image image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            lblIcon.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        header.add(greeting);
+        header.add(lblIcon);
         frame.add(header);
     }
 
@@ -255,8 +272,21 @@ public class AdminPanel {
             FileInterface.writeMeals();
         });
 
+        JLabel lblIcon = new JLabel();
+        lblIcon.setBounds(585, 15, 150, 150);
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/Meal.PNG"));
+            Image image = bufferedImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            lblIcon.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         mealPanel.add(btnCancel);
         mealPanel.add(btnApply);
+        mealPanel.add(lblIcon);
 
         mealPanel.setVisible(false);
 
@@ -463,15 +493,19 @@ public class AdminPanel {
         JButton btnAdd = new JButton("Create");
         btnAdd.setBounds(230, 280, 100, 30);
         btnAdd.addActionListener(e -> {
-            Professor professor = new Professor();
-            professor.setFirstName(txtFirstName.getText());
-            professor.setLastName(txtLastName.getText());
-            professor.setId(txtId.getText());
-            professor.setPassword(txtPassword.getText());
-            admin.addProfessor(professor);
-            addingProfessorFrame.dispose();
-            frame.dispose();
-            new AdminPanel(admin);
+            if (txtPassword.getText().length() < 8) {
+                txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));
+            } else {
+                Professor professor = new Professor();
+                professor.setFirstName(txtFirstName.getText());
+                professor.setLastName(txtLastName.getText());
+                professor.setId(txtId.getText());
+                professor.setPassword(txtPassword.getText());
+                admin.addProfessor(professor);
+                addingProfessorFrame.dispose();
+                frame.dispose();
+                new AdminPanel(admin);
+            }
         });
 
         addingProfessorFrame.add(lblFirstName);
