@@ -278,7 +278,7 @@ public class StudentPanel {
                     balancePanel.setVisible(true);
                     txtBalance.setText(student.getBalance() + "");
                 } else {
-                    System.out.println("Not enough balance");
+                    System.out.println("Not reserved");
                 }
             }
         });
