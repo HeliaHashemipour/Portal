@@ -71,5 +71,13 @@ public class Student extends Person {
         }
         return unitSum == 0 ? 0 : sum / unitSum;
     }
+
+    public int getNumberOfUnits() {
+        int units = 0;
+        for (Unit unit : this.units) {
+            units += unit.getClassroom().getNumberOfUnit();
+        }
+        return units;
+    }
 }
 
