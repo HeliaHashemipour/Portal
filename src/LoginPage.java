@@ -1,6 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class LoginPage {
 
@@ -16,15 +22,29 @@ public class LoginPage {
         frame.setLayout(null);
         JPanel background = new JPanel(null);
         background.setBounds(0, 0, 500, 500);
-        background.setBackground(Color.GRAY);
 
         panel = new JPanel(null);
         panel.setBounds(50, 90, 300, 200);
 
         setComponents();
 
+        ImageIcon icon = null;
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/LoginPage.JPG"));
+            Image image = bufferedImage.getScaledInstance(410, 410, Image.SCALE_SMOOTH);
+            icon = new ImageIcon(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JLabel lblIcon = new JLabel();
+        lblIcon.setIcon(icon);
+        lblIcon.setBounds(0, 0, 410, 410);
+
 
         background.add(panel);
+        background.add(lblIcon);
         frame.add(background);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
