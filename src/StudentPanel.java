@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -6,6 +7,9 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +67,20 @@ public class StudentPanel {
         greeting.setFont(font);
         greeting.setBounds(20, 50, 700, 20);
 
+        JLabel lblIcon = new JLabel();
+        lblIcon.setBounds(887, 13, 100, 100);
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("src/image/Student.JPG"));
+            Image image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            lblIcon.setIcon(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         header.add(greeting);
+        header.add(lblIcon);
 
         frame.add(header);
     }
@@ -173,12 +190,32 @@ public class StudentPanel {
         btnChangePassword.setBounds(330, 205, 100, 30);
         btnChangePassword.addActionListener(e -> student.setPassword(txtPassword.getText()));
 
+        JLabel lblGrade = new JLabel("Grade");
+        lblGrade.setBounds(30, 300, 100, 30);
+
+        JTextField txtGrade = new JTextField();
+        txtGrade.setBounds(120, 300, 200, 30);
+        txtGrade.setEnabled(false);
+        txtGrade.setText(student.averageGrade() + "");
+
+        JLabel lblUnits = new JLabel("Units");
+        lblUnits.setBounds(30, 400, 100, 30);
+
+        JTextField txtUnits = new JTextField();
+        txtUnits.setBounds(120, 400, 200, 30);
+        txtUnits.setText(student.getNumberOfUnits() + "");
+        txtUnits.setEnabled(false);
+
         personalPanel.add(lblUsername);
         personalPanel.add(txtUsername);
         personalPanel.add(btnChangeUsername);
         personalPanel.add(btnChangePassword);
         personalPanel.add(lblPassword);
+        personalPanel.add(lblGrade);
+        personalPanel.add(txtGrade);
         personalPanel.add(txtPassword);
+        personalPanel.add(lblUnits);
+        personalPanel.add(txtUnits);
 
         personalPanel.setVisible(false);
 
@@ -251,6 +288,19 @@ public class StudentPanel {
 
         JTable jTable = new JTable(model);
 
+        jTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = jTable.rowAtPoint(e.getPoint());
+                int column = jTable.columnAtPoint(e.getPoint());
+                if (column == 6) {
+                    Unit unit = student.getUnits().remove(row);
+                    unit.getClassroom().getStudents().remove(student);
+                    frame.dispose();
+                    new StudentPanel(student);
+                }
+            }
+        });
 
         TableCellRenderer renderer = (table, value, isSelected, hasFocus, row, column) -> (JButton) value;
 
@@ -284,15 +334,31 @@ public class StudentPanel {
         txtBalance.setEditable(false);
 
         JLabel lblAmount = new JLabel("Amount");
-        lblAmount.setBounds(30, 300, 100, 30);
+        lblAmount.setBounds(30, 400, 100, 30);
         lblAmount.setVisible(false);
 
         JTextField txtAmount = new JTextField();
-        txtAmount.setBounds(120, 300, 200, 30);
+        txtAmount.setBounds(120, 400, 200, 30);
         txtAmount.setVisible(false);
 
+        JLabel lblAccountNumber = new JLabel("AccountNumber");
+        lblAccountNumber.setBounds(30, 200, 100, 30);
+        lblAccountNumber.setVisible(false);
+
+        JTextField txtAccountNumber = new JTextField();
+        txtAccountNumber.setBounds(120, 200, 200, 30);
+        txtAccountNumber.setVisible(false);
+
+        JLabel lblPassword = new JLabel("Password");
+        lblPassword.setBounds(30, 300, 100, 30);
+        lblPassword.setVisible(false);
+
+        JTextField txtPassword = new JTextField();
+        txtPassword.setBounds(120, 300, 200, 30);
+        txtPassword.setVisible(false);
+
         JButton btnSubmit = new JButton("Submit");
-        btnSubmit.setBounds(330, 300, 100, 30);
+        btnSubmit.setBounds(330, 400, 100, 30);
         btnSubmit.setVisible(false);
 
         JButton btnDeposit = new JButton("Deposit");
@@ -301,6 +367,10 @@ public class StudentPanel {
             lblAmount.setVisible(true);
             txtAmount.setVisible(true);
             btnSubmit.setVisible(true);
+            lblAccountNumber.setVisible(true);
+            txtAccountNumber.setVisible(true);
+            lblPassword.setVisible(true);
+            txtPassword.setVisible(true);
             btnDeposit.setEnabled(false);
         });
 
@@ -310,6 +380,10 @@ public class StudentPanel {
             lblAmount.setVisible(false);
             txtAmount.setVisible(false);
             btnSubmit.setVisible(false);
+            lblAccountNumber.setVisible(false);
+            lblPassword.setVisible(false);
+            txtAccountNumber.setVisible(false);
+            txtPassword.setVisible(false);
             btnDeposit.setEnabled(true);
         });
 
@@ -320,6 +394,10 @@ public class StudentPanel {
         balancePanel.add(txtAmount);
         balancePanel.add(btnDeposit);
         balancePanel.add(btnSubmit);
+        balancePanel.add(lblAccountNumber);
+        balancePanel.add(lblPassword);
+        balancePanel.add(txtAccountNumber);
+        balancePanel.add(txtPassword);
         balancePanel.setVisible(false);
 
         mainPanel.add(balancePanel);
@@ -362,7 +440,7 @@ public class StudentPanel {
         for (Unit unit : student.getUnits()) {
             classrooms.add(unit.getClassroom());
         }
-        Object[][] data = new Object[classrooms.size()][6];
+        Object[][] data = new Object[classrooms.size()][7];
         for (int i = 0; i < classrooms.size(); i++) {
             data[i][0] = classrooms.get(i).getName();
             data[i][1] = classrooms.get(i).getNumberOfUnit();
@@ -403,8 +481,18 @@ public class StudentPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
                 int column = table.columnAtPoint(e.getPoint());
+                List<Classroom> classrooms = new ArrayList<>();
+                List<Classroom> allClassrooms = FileInterface.allClassrooms();
+                for (Classroom classroom : allClassrooms) {
+                    boolean flag = true;
+                    for (Unit unit : student.getUnits()) {
+                        flag = flag && unit.getClassroom().equals(classroom);
+                    }
+                    if (flag)
+                        classrooms.add(classroom);
+                }
                 Classroom classroom;
-                if (column == 5 && student.addUnit(classroom = FileInterface.allClassrooms().get(row))) {
+                if (column == 5 && student.addUnit(classroom = classrooms.get(row))) {
                     classroom.addStudent(student);
                     FileInterface.updateProfessor(classroom.getProfessor());
                     classroomsFrame.dispose();
