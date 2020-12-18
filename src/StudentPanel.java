@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class show a panel for every student.
+ */
 public class StudentPanel {
 
     private final Student student;
@@ -26,10 +29,14 @@ public class StudentPanel {
     private JPanel balancePanel;
     private JTextField txtBalance;
 
-
+    /**
+     * The constructor of this class that puts every component on its location.
+     * @param st
+     */
     public StudentPanel(Student st) {
         student = st;
-
+        for (Unit unit : st.getUnits())
+            System.out.println(unit.getClassroom().getName());
         frame = new JFrame();
         frame.setBounds(100, 100, 1000, 700);
         frame.setTitle("Students Panel");
@@ -54,6 +61,9 @@ public class StudentPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    /**
+     * This method sets the header of this panel
+     */
     private void setHeader() {
         header = new JPanel();
         header.setBounds(0, 0, 1000, 125);
@@ -85,6 +95,9 @@ public class StudentPanel {
         frame.add(header);
     }
 
+    /**
+     * This method sets the main panel of studetns panel
+     */
     private void setMainPanel() {
         mainPanel = new JPanel();
         mainPanel.setBounds(250, 125, 750, 575);
@@ -96,6 +109,9 @@ public class StudentPanel {
         frame.add(mainPanel);
     }
 
+    /**
+     * This method sets the menu of this student.
+     */
     private void setMenu() {
         menu = new JPanel();
         menu.setBounds(0, 125, 250, 575);
@@ -157,6 +173,9 @@ public class StudentPanel {
         frame.add(menu);
     }
 
+    /**
+     * This metohd sets the personal panel of this studetn with its information.
+     */
     private void setPersonalPanel() {
         personalPanel = new JPanel();
         personalPanel.setBounds(0, 0, 750, 575);
@@ -222,6 +241,9 @@ public class StudentPanel {
         mainPanel.add(personalPanel);
     }
 
+    /**
+     * This method sets the meal panel of this student with the meal plan's information.
+     */
     private void setMealPanel() {
         mealPanel = new JPanel();
         mealPanel.setBounds(0, 0, 750, 575);
@@ -270,6 +292,9 @@ public class StudentPanel {
         mainPanel.add(mealPanel);
     }
 
+    /**
+     * This method shows the classrooms of the student in a table.
+     */
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
         classRoomsPanel.setLayout(null);
@@ -320,6 +345,9 @@ public class StudentPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+    /**
+     * This method sets the balance panel for the student.
+     */
     private void setBalancePanel() {
         balancePanel = new JPanel();
         balancePanel.setLayout(null);
@@ -403,6 +431,10 @@ public class StudentPanel {
         mainPanel.add(balancePanel);
     }
 
+    /**
+     * This method returns the meals data that we wanna' show in table.
+     * @return
+     */
     private Object[][] getMeals() {
         Meal[] meals = FileInterface.getMeals();
         Object[][] data = new Object[7][4];
@@ -435,6 +467,10 @@ public class StudentPanel {
         return data;
     }
 
+    /**
+     * This method return the classrooms data that we wanna' show in table.
+     * @return
+     */
     private Object[][] getClassRooms() {
         List<Classroom> classrooms = new ArrayList<>();
         for (Unit unit : student.getUnits()) {
@@ -454,6 +490,9 @@ public class StudentPanel {
         return data;
     }
 
+    /**
+     * This method shows a new frame that student can choose a new classroom to join in.
+     */
     private void addClassroom() {
         JFrame classroomsFrame = new JFrame("Classrooms");
         classroomsFrame.setBounds(200, 200, 600, 500);
@@ -481,14 +520,14 @@ public class StudentPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
                 int column = table.columnAtPoint(e.getPoint());
-                List<Classroom> classrooms = new ArrayList<>();
+                List<Classroom> studentsClassrooms = new ArrayList<>();
+                for (Unit unit : student.getUnits()) {
+                    studentsClassrooms.add(unit.getClassroom());
+                }
                 List<Classroom> allClassrooms = FileInterface.allClassrooms();
+                List<Classroom> classrooms = new ArrayList<>();
                 for (Classroom classroom : allClassrooms) {
-                    boolean flag = true;
-                    for (Unit unit : student.getUnits()) {
-                        flag = flag && unit.getClassroom().equals(classroom);
-                    }
-                    if (flag)
+                    if (!studentsClassrooms.contains(classroom))
                         classrooms.add(classroom);
                 }
                 Classroom classroom;
@@ -509,6 +548,10 @@ public class StudentPanel {
         classroomsFrame.setVisible(true);
     }
 
+    /**
+     * This method return all of the classrooms that the student can join.
+     * @return
+     */
     private Object[][] getAllClassRooms() {
         List<Classroom> classrooms = FileInterface.allClassrooms();
         List<Classroom> selectedClassrooms = new ArrayList<>();

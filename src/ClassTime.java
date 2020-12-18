@@ -1,5 +1,8 @@
 import java.io.Serializable;
 
+/**
+ * This enumeration represents the class time of the classrooms.
+ */
 public enum ClassTime implements Serializable {
 
     FIRST,
@@ -7,6 +10,10 @@ public enum ClassTime implements Serializable {
     THIRD,
     FORTH;
 
+    /**
+     * To string method of this class
+     * @return
+     */
     @Override
     public String toString() {
         return switch (this) {

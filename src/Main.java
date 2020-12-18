@@ -3,8 +3,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * The main class of this application
+ */
 public class Main {
 
+    /**
+     * main method
+     * everything starts here.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         new LoginPage();
     }

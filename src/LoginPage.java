@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+/**
+ * This class designs and shows the login page of this application.
+ */
 public class LoginPage {
 
     private JFrame frame;
@@ -16,9 +19,12 @@ public class LoginPage {
     private JComboBox<String> cmbRole;
     private JButton btnSubmit;
 
+    /**
+     * The constructor of this method that sets all of the components.
+     */
     public LoginPage() {
         frame = new JFrame("Login");
-        frame.setBounds(100, 100, 410, 410);
+        frame.setBounds(650, 300, 410, 410);
         frame.setLayout(null);
         JPanel background = new JPanel(null);
         background.setBounds(0, 0, 500, 500);
@@ -51,6 +57,9 @@ public class LoginPage {
         frame.setVisible(true);
     }
 
+    /**
+     * This method sets componenets of the login page
+     */
     private void setComponents() {
         JLabel lblId, lblPassword, lblRole;
         lblId = new JLabel("Username:");
@@ -100,6 +109,13 @@ public class LoginPage {
         panel.add(btnSubmit);
     }
 
+    /**
+     * Thsi method logs in if there is a person with the given id and password and role.
+     * @param id
+     * @param password
+     * @param role
+     * @return
+     */
     private int login(String id, String password, String role) {
         switch (role) {
             case "Admin":

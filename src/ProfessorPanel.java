@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class creates a new professors panel and shows it for the user.
+ */
 public class ProfessorPanel {
 
     private Professor professor;
@@ -26,6 +29,10 @@ public class ProfessorPanel {
     private JPanel classRoomsPanel;
     private JPanel studentsPanel;
 
+    /**
+     * The constructor of this method that puts every content on its location.
+     * @param professor
+     */
     public ProfessorPanel(Professor professor) {
         this.professor = professor;
 
@@ -51,6 +58,9 @@ public class ProfessorPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    /**
+     * This method sets the header of this panel.
+     */
     private void setHeader() {
         header = new JPanel();
         header.setBounds(0, 0, 1000, 125);
@@ -82,6 +92,9 @@ public class ProfessorPanel {
         frame.add(header);
     }
 
+    /**
+     * This method sets the menu of this panel.
+     */
     private void setMenu() {
         menu = new JPanel();
         menu.setBounds(0, 125, 250, 575);
@@ -130,6 +143,9 @@ public class ProfessorPanel {
         frame.add(menu);
     }
 
+    /**
+     * This method sets the main panel of this panel.
+     */
     private void setMainPanel() {
         mainPanel = new JPanel();
         mainPanel.setBounds(250, 125, 750, 575);
@@ -141,6 +157,9 @@ public class ProfessorPanel {
         frame.add(mainPanel);
     }
 
+    /**
+     * This method sets the personal panel of the professor with the professors information.
+     */
     private void setPersonalPanel() {
         personalPanel = new JPanel();
         personalPanel.setBounds(0, 0, 750, 575);
@@ -188,6 +207,9 @@ public class ProfessorPanel {
         mainPanel.add(personalPanel);
     }
 
+    /**
+     * this panel show all of the students of the professor in a table.
+     */
     private void setStudentsPanel() {
         studentsPanel = new JPanel();
         studentsPanel.setLayout(null);
@@ -263,6 +285,9 @@ public class ProfessorPanel {
         mainPanel.add(studentsPanel);
     }
 
+    /**
+     * This method shows all of the classrooms of the professor in created panel.
+     */
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
         classRoomsPanel.setBounds(0, 0, 750, 575);
@@ -286,7 +311,16 @@ public class ProfessorPanel {
                 int row = table.rowAtPoint(e.getPoint());
                 int column = table.columnAtPoint(e.getPoint());
                 if (column == 5) {
-                    professor.getClassrooms().remove(row);
+                    Classroom classroom = professor.getClassrooms().remove(row);
+                    for (Student st : classroom.getStudents()) {
+                        for (Unit unit : st.getUnits()) {
+                            if (unit.getClassroom().equals(classroom)) {
+                                Student student = FileInterface.getStudent(st.getId());
+                                student.getUnits().remove(st.getUnits().indexOf(unit));
+                                FileInterface.updateStudent(student);
+                            }
+                        }
+                    }
                     frame.dispose();
                     new ProfessorPanel(professor);
                 }
@@ -310,6 +344,9 @@ public class ProfessorPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+    /**
+     * This method shows a new frame to professor to add a new classroom.
+     */
     private void addClassRoom() {
         JFrame addingClassroom = new JFrame("Adding Classroom");
         addingClassroom.setLayout(null);
@@ -403,6 +440,10 @@ public class ProfessorPanel {
         addingClassroom.setVisible(true);
     }
 
+    /**
+     * This method returns all of the data that we wanna' put in tabll of classrooms.
+     * @return
+     */
     private Object[][] getClassrooms() {
         List<Classroom> classrooms = professor.getClassrooms();
         Object[][] data = new Object[classrooms.size()][6];
@@ -424,6 +465,11 @@ public class ProfessorPanel {
         return data;
     }
 
+    /**
+     * This method returns all of the data that we wanna' show in students table.
+     * @param classroom
+     * @return
+     */
     private Object[][] getStudents(Classroom classroom) {
         if (classroom == null)
             return null;
@@ -441,6 +487,11 @@ public class ProfessorPanel {
         return data;
     }
 
+    /**
+     * This method show a new frame for professor to set grade of a student.
+     * @param st
+     * @param classroom
+     */
     private void setStudentsGrade(Student st, Classroom classroom) {
         JFrame setGradeFrame = new JFrame(String.format("%s %s", st.getFirstName(), st.getLastName()));
         setGradeFrame.setLayout(null);
@@ -455,9 +506,9 @@ public class ProfessorPanel {
         JButton btnSubmit = new JButton("Submit");
         btnSubmit.setBounds(135, 130, 100, 30);
         btnSubmit.addActionListener(e -> {
-            List<Unit> units = st.getUnits();
-            professor.setGrade(st, classroom, Integer.parseInt(txtGrade.getText()));
-            FileInterface.updateStudent(st);
+            Student student = FileInterface.getStudent(st.getId());
+            professor.setGrade(student, classroom, Double.parseDouble(txtGrade.getText()));
+            FileInterface.updateStudent(student);
             setGradeFrame.dispose();
         });
 

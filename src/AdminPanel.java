@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The swing class that creates and shows admin panel for the user.
+ */
 public class AdminPanel {
 
     private JFrame frame;
@@ -25,6 +28,10 @@ public class AdminPanel {
     private JPanel classRoomsPanel;
     private final Admin admin;
 
+    /**
+     * The constructor of this class that sets all data from the given admin to the admin panel.
+     * @param admin
+     */
     public AdminPanel(Admin admin) {
         this.admin = admin;
         frame = new JFrame();
@@ -54,6 +61,9 @@ public class AdminPanel {
         frame.setVisible(true);
     }
 
+    /**
+     * This method sets all of the headers components.
+     */
     private void setHeader() {
         header = new JPanel();
         header.setBounds(0, 0, 1000, 125);
@@ -84,6 +94,9 @@ public class AdminPanel {
         frame.add(header);
     }
 
+    /**
+     * This method sets all of the menus components.
+     */
     private void setMenu() {
         menu = new JPanel();
         menu.setBounds(0, 125, 250, 575);
@@ -159,6 +172,9 @@ public class AdminPanel {
         frame.add(menu);
     }
 
+    /**
+     * This method sets all of the main panels components.
+     */
     private void setMainPanel() {
         mainPanel = new JPanel();
         mainPanel.setBounds(250, 125, 750, 575);
@@ -170,6 +186,9 @@ public class AdminPanel {
         frame.add(mainPanel);
     }
 
+    /**
+     * This method creates personal panel that contains the personal info of this admin
+     */
     private void setPersonalPanel() {
         personalPanel = new JPanel();
         personalPanel.setBounds(0, 0, 750, 575);
@@ -217,6 +236,9 @@ public class AdminPanel {
         mainPanel.add(personalPanel);
     }
 
+    /**
+     * This menu sets a meal panel for admin that he can change the meal plan of this week.
+     */
     private void setMealPanel() {
         mealPanel = new JPanel();
         mealPanel.setBounds(0, 0, 750, 575);
@@ -293,6 +315,10 @@ public class AdminPanel {
         mainPanel.add(mealPanel);
     }
 
+    /**
+     * It's sets components of students panel that admin can see all of the students in one table
+     * and add as many students as he desires
+     */
     private void setStudentsPanel() {
         studentsPanel = new JPanel();
         studentsPanel.setLayout(null);
@@ -324,6 +350,11 @@ public class AdminPanel {
         mainPanel.add(studentsPanel);
     }
 
+    /**
+     * It's sets professors panel that admin can see all of the professors in one table.
+     * and add as many professors as he desires.
+     *
+     */
     private void setProfessorsPanel() {
         professorsPanel = new JPanel();
         professorsPanel.setBounds(0, 0, 750, 575);
@@ -354,6 +385,9 @@ public class AdminPanel {
         mainPanel.add(professorsPanel);
     }
 
+    /**
+     * This method sets all components of Classrooms panel and shows all of the classrooms in one table
+     */
     private void setClassRoomsPanel() {
         classRoomsPanel = new JPanel();
         classRoomsPanel.setBounds(0, 0, 750, 575);
@@ -379,6 +413,10 @@ public class AdminPanel {
         mainPanel.add(classRoomsPanel);
     }
 
+    /**
+     * This method returns data that we wanna show on students table
+     * @return
+     */
     private String[][] getStudents() {
         List<Student> students = FileInterface.allStudents();
         String[][] data = new String[students.size()][5];
@@ -392,6 +430,10 @@ public class AdminPanel {
         return data;
     }
 
+    /**
+     * This method returns data of teh professors table.
+     * @return
+     */
     private String[][] getProfessors() {
         List<Professor> professors = FileInterface.allProfessor();
         String[][] data = new String[professors.size()][4];
@@ -404,6 +446,9 @@ public class AdminPanel {
         return data;
     }
 
+    /**
+     * This method shows a panel that admin can add a student to the file via that panel
+     */
     private void addStudent() {
         JFrame addingStudentFrame = new JFrame("Adding student");
         addingStudentFrame.setLayout(null);
@@ -461,8 +506,11 @@ public class AdminPanel {
         addingStudentFrame.setVisible(true);
     }
 
+    /**
+     * This method shows a panel that admin can add a professor via this panel
+     */
     private void addProfessor() {
-        JFrame addingProfessorFrame = new JFrame("Adding student");
+        JFrame addingProfessorFrame = new JFrame("Adding Professor");
         addingProfessorFrame.setLayout(null);
         addingProfessorFrame.setBounds(300, 300, 370, 370);
 
@@ -478,7 +526,7 @@ public class AdminPanel {
         JTextField txtLastName = new JTextField();
         txtLastName.setBounds(130, 110, 200, 30);
 
-        JLabel lblId = new JLabel("StudentID:");
+        JLabel lblId = new JLabel("ID:");
         lblId.setBounds(30, 170, 100, 30);
 
         JTextField txtId = new JTextField();
@@ -521,6 +569,10 @@ public class AdminPanel {
         addingProfessorFrame.setVisible(true);
     }
 
+    /**
+     * Ths method return all of the classroom data that we wanna show in classromms table.
+     * @return
+     */
     private String[][] getClassrooms() {
         List<Classroom> classrooms = FileInterface.allClassrooms();
         String[][] data = new String[classrooms.size()][6];
