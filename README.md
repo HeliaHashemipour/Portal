@@ -31,4 +31,3 @@ This project is about creating an portal , which three type of people contribute
 - Make classes baded on the time ranges.
 - Has a list of all students (which have courses with him/her).
 - Can Close a class.
-
