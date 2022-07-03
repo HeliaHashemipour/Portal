@@ -1,5 +1,8 @@
-# Portal
-This project is about creating an portal , which three type of people contributes there:
+
+This project is about creating an portal , which three type of people contributes there(GUI):
+
+<img width="409" alt="Screen Shot 1401-04-12 at 11 23 48" src="https://user-images.githubusercontent.com/71961438/177028689-8577474e-bbc3-4be7-a02d-0f9dee39fdc6.png">
+
 
 # Admin
 - There is only **ONE** admin.
@@ -11,6 +14,7 @@ This project is about creating an portal , which three type of people contribute
 - Has list of students and professors.
 - Can make courses.
 - Adding students and professors.
+
 
 # Students
 - Can change his username and password.
@@ -27,3 +31,4 @@ This project is about creating an portal , which three type of people contribute
 - Make classes baded on the time ranges.
 - Has a list of all students (which have courses with him/her).
 - Can Close a class.
+
